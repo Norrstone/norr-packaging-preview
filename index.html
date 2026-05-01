@@ -629,19 +629,11 @@ function PackFront({ showSafe, showDieline }) {
             (Iceland Reg. 1294/2014) + net quantity figures sized for
             Dir. 76/211/EEC compliance (≥ 2 mm character height for ≤ 50 g packs) */}
         <div style={{
-          marginTop: mm(1.6),
-          display:'flex', justifyContent:'center', alignItems:'baseline', gap: mm(2),
-          fontFamily: F_DISP, color: norr.ice,
+          marginTop: mm(1.6), textAlign: 'center',
+          fontFamily: F_MONO, fontWeight: 600, fontSize: 2.8 * MM,
+          letterSpacing: '0.18em', color: norr.ice,
         }}>
-          <span style={{ fontStyle: 'italic', fontWeight: 400, fontSize: 2.6 * MM,
-            letterSpacing: '0.02em', opacity: 0.85 }}>
-            Tyggigúmmí
-          </span>
-          <span style={{ opacity: 0.4, fontSize: 2.6 * MM }}>·</span>
-          <span style={{ fontFamily: F_MONO, fontWeight: 600, fontSize: 2.8 * MM,
-            letterSpacing: '0.16em' }}>
-            12&nbsp;STK · 21,6&nbsp;g&nbsp;<span style={{ fontWeight: 500 }}>℮</span>
-          </span>
+          12&nbsp;STK · 21,6&nbsp;g&nbsp;<span style={{ fontWeight: 500 }}>℮</span>
         </div>
       </div>
 
@@ -1128,10 +1120,6 @@ function BoxFront({ showSafe }) {
         borderTop: `0.5px solid ${norr.mintLt}`, paddingTop: mm(2.5),
         display:'flex', justifyContent:'space-between', alignItems:'baseline', gap: mm(4),
       }}>
-        <span style={{ fontFamily: F_DISP, fontWeight: 400, fontStyle:'italic',
-          fontSize: 4.2 * MM, color: norr.ice, letterSpacing:'0.02em', opacity: 0.92 }}>
-          Tyggigúmmí
-        </span>
         <MonoLabel size={6.2} tracking="0.32em" color={norr.mintLt}>
           NORDIC FORMULA · SUGAR-FREE · LONG-LASTING FRESHNESS
         </MonoLabel>
