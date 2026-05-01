@@ -1,0 +1,2120 @@
+<!doctype html>
+<!-- NORR Packaging — standalone bundle. Open by double-clicking; needs internet to load React + Google Fonts. -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NORR — Packaging System (Stakeholder Preview)</title>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#2A7C85"/><text x="100" y="118" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="64" letter-spacing="-2" fill="#F2F3F0">NORR</text></svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html, body { margin:0; padding:0; background:#E6E8E4; font-family:'Inter Tight', system-ui, sans-serif; color:#0B0E10; }
+  *, *::before, *::after { box-sizing: border-box; }
+
+  .app {
+    min-height: 100vh;
+    padding: 48px 48px 120px;
+  }
+
+  .topbar {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding-bottom: 24px; border-bottom: 1px solid #C9CDC7;
+    margin-bottom: 40px;
+    gap: 32px; flex-wrap: wrap;
+  }
+  .topbar h1 {
+    font-family: 'Inter Tight'; font-weight: 600;
+    font-size: 28px; letter-spacing: -0.02em; margin: 0 0 6px;
+  }
+  .topbar .sub {
+    font-family: 'JetBrains Mono'; font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: #5A6268;
+  }
+  .tabs {
+    display:flex; gap: 0; align-items:stretch;
+    border: 1px solid #0B0E10;
+  }
+  .tabs button {
+    font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; padding: 10px 18px;
+    background: transparent; color: #0B0E10; border: none;
+    cursor: pointer; border-right: 1px solid #0B0E10;
+  }
+  .tabs button:last-child { border-right: none; }
+  .tabs button.active { background: #0B0E10; color: #F2F3F0; }
+
+  .section {
+    padding: 48px 0;
+    border-bottom: 1px solid #C9CDC7;
+  }
+  .section-header {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom: 32px; gap: 24px; flex-wrap: wrap;
+  }
+  .section-header h2 {
+    font-family: 'Inter Tight'; font-weight: 500; font-size: 20px;
+    letter-spacing: -0.01em; margin: 0 0 4px;
+  }
+  .section-header .meta {
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: #5A6268;
+  }
+  .caption {
+    font-family: 'JetBrains Mono'; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: #5A6268;
+    margin-bottom: 10px;
+  }
+
+  .panel-stage {
+    background:
+      repeating-linear-gradient(45deg, #EDEFEC 0 1px, transparent 1px 14px),
+      #F5F6F3;
+    border: 1px solid #C9CDC7;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+  }
+  .dark-stage {
+    background:
+      radial-gradient(ellipse at center, #2a2e30 0%, #0B0E10 80%);
+    border: 1px solid #0B0E10;
+    padding: 60px;
+    display:flex; justify-content:center; align-items:center;
+    min-height: 600px;
+    overflow: auto;
+  }
+
+  .row { display:flex; gap: 32px; flex-wrap: wrap; }
+  .col { display:flex; flex-direction: column; gap: 16px; align-items:flex-start; }
+
+  /* Tweaks panel */
+  .tweaks {
+    position: fixed;
+    top: 20px; right: 20px;
+    width: 280px;
+    background: #F2F3F0;
+    border: 1px solid #0B0E10;
+    padding: 18px;
+    z-index: 1000;
+    font-family: 'Inter Tight';
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .tweaks .title {
+    font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.25em; text-transform: uppercase; margin: 0 0 16px;
+    padding-bottom: 10px; border-bottom: 1px solid #0B0E10;
+  }
+  .tweaks .group { margin-bottom: 14px; }
+  .tweaks .label {
+    font-family: 'JetBrains Mono'; font-size: 9px; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase; color: #5A6268;
+    margin-bottom: 6px;
+  }
+  .tweaks .toggles { display:flex; flex-wrap: wrap; gap: 4px; }
+  .tweaks .toggles button {
+    font-family: 'JetBrains Mono'; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 6px 10px;
+    background: transparent; border: 1px solid #0B0E10; color: #0B0E10;
+    cursor: pointer;
+  }
+  .tweaks .toggles button.on { background: #0B0E10; color: #F2F3F0; }
+  .tweaks .swatches { display:flex; gap: 6px; }
+  .tweaks .swatches button {
+    width: 28px; height: 28px; border: 1px solid #0B0E10;
+    padding: 0; cursor: pointer;
+  }
+  .tweaks .swatches button.on { outline: 2px solid #0B0E10; outline-offset: 2px; }
+
+  .dieline-legend-wrap {
+    padding: 16px 0; margin-bottom: 16px;
+    border-top: 1px solid #C9CDC7; border-bottom: 1px solid #C9CDC7;
+  }
+
+  /* Scroll containers for wide artboards */
+  .scroll-x { overflow-x: auto; padding: 24px 0; }
+
+  /* Scenebox for mockups has subtle shadow floor */
+  .scenebox {
+    width: 100%;
+    min-height: 520px;
+    display:flex; justify-content:center; align-items:center;
+    position: relative;
+  }
+  .scenebox::after {
+    content:''; position:absolute; left:10%; right:10%;
+    bottom: 40px; height: 30px;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.35), transparent 70%);
+    filter: blur(8px);
+    z-index: 0;
+  }
+  .scenebox > * { position: relative; z-index: 1; }
+
+  /* Assumptions card */
+  .notes {
+    background: #F2F3F0; border: 1px solid #C9CDC7;
+    padding: 24px; margin-bottom: 32px;
+    font-family: 'Inter Tight'; font-size: 14px; line-height: 1.55;
+  }
+  .notes h3 {
+    font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    margin: 0 0 10px; color: #5A6268;
+  }
+  .notes ul { margin: 0; padding-left: 18px; }
+  .notes li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react" data-source="packaging.jsx">
+/* === inlined from packaging.jsx === */
+// NORR Energy Gum — Packaging Design System
+// Arctic Mint launch SKU
+// Pack sleeve: 90×135mm | Display box: 240×140×90mm
+//
+// Source: claude.ai design session (recovered 2026-04-30).
+// This file is the PRIMITIVES layer — tokens, dieline metrics, and shared
+// components. The assembled pack faces (front / back / sides / display box)
+// are not in this file.
+
+// ─────────────────────────────────────────────────────────
+// METRICS — print-real at 1mm = MM px
+// ─────────────────────────────────────────────────────────
+const MM = 3.7795275591; // 1mm @ 96dpi CSS pixels
+const mm = (n) => `${n * MM}px`;
+
+// Pack sleeve (single carton) — 90w × 135h
+const PACK = { w: 90, h: 135, d: 20 }; // depth assumed for a tuck-end sleeve
+// Display box — 240w × 140h × 90d (from dieline)
+const BOX = { w: 240, h: 140, d: 90 };
+
+// ─────────────────────────────────────────────────────────
+// TOKENS
+// ─────────────────────────────────────────────────────────
+const norr = {
+  ice:    '#F2F3F0',   // off-white base
+  iceDim: '#E6E8E4',   // panel tint
+  ink:    '#0B0E10',   // near-black
+  muted:  '#5A6268',   // secondary text
+  line:   '#C9CDC7',   // hairlines
+  mint:   '#338DB8',   // NORR brand blue (matches reference pouch)
+  mintDk: '#1F6F95',
+  mintLt: '#7FB7D4',
+  mintTint:'#CFE3EE',
+  // dieline inks
+  cut:    '#E34A3F',
+  fold:   '#3862D4',
+  perf:   '#C08C2B',
+  safe:   'rgba(14,170,120,0.55)',
+  bleed:  'rgba(227,74,63,0.25)',
+};
+
+const F_DISP = '"Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif';
+const F_MONO = '"JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace';
+
+// ─────────────────────────────────────────────────────────
+// SHARED PRIMITIVES
+// ─────────────────────────────────────────────────────────
+function Wordmark({ size = 72, color = norr.ink, tracking = '-0.04em' }) {
+  // Editorial, wide-weight wordmark. Small notch on the R counter gives character.
+  return (
+    <span style={{
+      fontFamily: F_DISP, fontWeight: 800, fontSize: size,
+      letterSpacing: tracking, lineHeight: 0.9, color,
+      display: 'inline-block', fontStretch: '110%',
+    }}>NORR</span>
+  );
+}
+
+function MonoLabel({ children, size = 8, color = norr.muted, tracking = '0.18em', weight = 500, style }) {
+  return (
+    <span style={{
+      fontFamily: F_MONO, fontSize: size, fontWeight: weight,
+      letterSpacing: tracking, color, textTransform: 'uppercase',
+      ...style,
+    }}>{children}</span>
+  );
+}
+
+function Hairline({ color = norr.line, thickness = 0.5, vertical = false, style }) {
+  return (
+    <div style={{
+      background: color,
+      width: vertical ? thickness : '100%',
+      height: vertical ? '100%' : thickness,
+      ...style,
+    }} />
+  );
+}
+
+// Crosshair / registration mark
+function Crosshair({ size = 10, color = norr.ink, style }) {
+  const s = size;
+  return (
+    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} style={{ display:'block', ...style }}>
+      <circle cx={s/2} cy={s/2} r={s/2-1} fill="none" stroke={color} strokeWidth="0.4" />
+      <line x1="0" y1={s/2} x2={s} y2={s/2} stroke={color} strokeWidth="0.4" />
+      <line x1={s/2} y1="0" x2={s/2} y2={s} stroke={color} strokeWidth="0.4" />
+    </svg>
+  );
+}
+
+// Corner tick marks used on panels
+function CornerTicks({ inset = 6, len = 5, color = norr.ink, thickness = 0.4 }) {
+  const t = thickness;
+  const L = len;
+  const i = inset;
+  const corner = (top, left) => (
+    <>
+      <div style={{
+        position: 'absolute',
+        [top ? 'top' : 'bottom']: i,
+        [left ? 'left' : 'right']: i,
+        width: L, height: t, background: color,
+      }} />
+      <div style={{
+        position: 'absolute',
+        [top ? 'top' : 'bottom']: i,
+        [left ? 'left' : 'right']: i,
+        width: t, height: L, background: color,
+      }} />
+    </>
+  );
+  return <>{corner(true,true)}{corner(true,false)}{corner(false,true)}{corner(false,false)}</>;
+}
+
+// Small topographic / contour pattern — subtle glacier hint
+function ContourBg({ opacity = 0.08, stroke = norr.ink }) {
+  // generate a few nested curved paths
+  const paths = [];
+  for (let i = 0; i < 7; i++) {
+    const y = 20 + i * 14;
+    const d = `M -10 ${y} C 40 ${y - 8}, 80 ${y + 10}, 130 ${y - 4} S 240 ${y + 6}, 310 ${y - 2}`;
+    paths.push(<path key={i} d={d} fill="none" stroke={stroke} strokeWidth="0.3" opacity={1 - i*0.08} />);
+  }
+  return (
+    <svg viewBox="0 0 300 200" preserveAspectRatio="none"
+      style={{ position:'absolute', inset:0, width:'100%', height:'100%', opacity, pointerEvents:'none' }}>
+      {paths}
+    </svg>
+  );
+}
+
+// Rune-ish NORR seal glyph (geometric, non-copyrighted)
+function NorrSeal({ size = 40, color = norr.ink, fill = 'none' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" style={{ display:'block' }}>
+      <circle cx="20" cy="20" r="19" fill={fill} stroke={color} strokeWidth="0.6" />
+      <circle cx="20" cy="20" r="13" fill="none" stroke={color} strokeWidth="0.4" />
+      <path d="M 14 12 L 14 28 M 14 12 L 26 28 M 26 12 L 26 28"
+        fill="none" stroke={color} strokeWidth="1.1" strokeLinecap="square" />
+      <text x="20" y="37" textAnchor="middle" fontFamily={F_MONO} fontSize="3" letterSpacing="0.25em" fill={color}>
+        NORDIC ENERGY
+      </text>
+    </svg>
+  );
+}
+
+// Mountain + lightning bolt icon — REAL brand logo (vectorized).
+// Paths sourced from logo.svg (435×345 viewBox); rendered in any single brand color.
+function MountainBolt({ size = 60, color = norr.ice, accent = norr.ice }) {
+  return (
+    <svg width={size} height={size * (345/435)} viewBox="0 0 435 345" style={{ display:'block' }}>
+      {/* Mountain outline */}
+      <path
+        fill={color}
+        d="M 411 217 L 331 130 L 306 138 L 221 29 L 152 118 L 116 118 L 28 218 L 60 218 L 128 141 L 167 141 L 221 72 L 298 169 L 324 158 L 380 218 Z"
+      />
+      {/* Lightning bolt */}
+      <path
+        fill={accent}
+        d="M 241 134 L 199 181 L 152 237 L 201 238 L 203 240 L 178 317 L 276 207 L 234 208 L 219 206 Z"
+      />
+    </svg>
+  );
+}
+
+// Big sans caffeine stat
+function StatBlock({ value, unit, label, color = norr.ink, align = 'left' }) {
+  return (
+    <div style={{ textAlign: align, color, lineHeight: 0.9 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, justifyContent: align === 'left' ? 'flex-start' : 'center' }}>
+        <span style={{ fontFamily: F_DISP, fontWeight: 700, fontSize: 44, letterSpacing: '-0.04em' }}>{value}</span>
+        <span style={{ fontFamily: F_DISP, fontWeight: 500, fontSize: 14 }}>{unit}</span>
+      </div>
+      <div style={{ marginTop: 4 }}>
+        <MonoLabel size={7} color={color}>{label}</MonoLabel>
+      </div>
+    </div>
+  );
+}
+
+// Small ingredient table for the back
+function NutritionTable({ compact = false, onBlue = false }) {
+  // Per 100 g values for sugar-free chewing gum (1.8 g / piece, 50 mg caffeine / piece, 10 μg B12 / piece)
+  // 50 mg × (100 / 1.8) ≈ 2778 mg → 2.78 g caffeine / 100 g
+  // 10 μg × (100 / 1.8) ≈ 556 μg B12 / 100 g  → 22 240 % NRV
+  const rows = [
+    ['Orka / Energy', '697 kJ / 165 kcal'],
+    ['Fita / Fat', '0,5 g'],
+    ['— þar af mettuð / of which saturates', '0 g'],
+    ['Kolvetni / Carbohydrates', '63 g'],
+    ['— þar af sykurtegundir / of which sugars', '0 g'],
+    ['— þar af fjölalkóhól / polyols', '60 g'],
+    ['Prótein / Protein', '0 g'],
+    ['Salt', '0 g'],
+    ['Koffín / Caffeine', '2 778 mg'],
+    ['B12-vítamín / Vitamin B12', '556 μg (22 240 % NRV)'],
+  ];
+  const fg = onBlue ? norr.ice : norr.ink;
+  const muted = onBlue ? norr.mintLt : norr.muted;
+  const line = onBlue ? 'rgba(255,255,255,0.35)' : norr.line;
+  const heavy = onBlue ? norr.ice : norr.ink;
+  // EU FIC Annex IV: mandatory info needs x-height ≥ 1.2 mm — sized in print-real mm.
+  const fs = compact ? 2.2 * MM : 2.6 * MM;
+  const hs = compact ? 1.9 * MM : 2.2 * MM;
+  const padY = compact ? '0.5mm' : '0.8mm';
+  return (
+    <table style={{
+      width: '100%', borderCollapse: 'collapse',
+      fontFamily: F_MONO, fontSize: fs, color: fg, lineHeight: 1.25,
+    }}>
+      <thead>
+        <tr style={{ borderBottom: `0.6px solid ${heavy}` }}>
+          <th style={{ textAlign:'left', padding: `${padY} 0`, fontSize: hs, fontWeight: 700, letterSpacing:'0.14em', textTransform:'uppercase', color: heavy }}>
+            Næringargildi / Nutrition
+          </th>
+          <th style={{ textAlign:'right', padding: `${padY} 0`, fontSize: hs, fontWeight: 500, color: muted, letterSpacing:'0.14em', textTransform:'uppercase' }}>
+            í 100 g / per 100 g
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(([a,b],i) => (
+          <tr key={i} style={{ borderBottom: `0.2px solid ${line}` }}>
+            <td style={{ padding: `${padY} 0` }}>{a}</td>
+            <td style={{ padding: `${padY} 0`, textAlign: 'right' }}>{b}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+// Real EAN-13 barcode for 5694080022721 — laid out to match supplied reference image:
+// leading "5" sits left of the bars at baseline; "694080" centered under left half;
+// "022721" centered under right half; bars descend to the digit baseline at the guards.
+function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
+  const L = ['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
+  const G = ['0100111','0110011','0011011','0100001','0011101','0111001','0000101','0010001','0001001','0010111'];
+  const R = ['1110010','1100110','1101100','1000010','1011100','1001110','1010000','1000100','1001000','1110100'];
+  const PARITY = ['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
+  const digits = code.replace(/\D/g,'').padStart(13,'0').slice(-13).split('').map(Number);
+  const parity = PARITY[digits[0]];
+  let bits = '101';
+  for (let i = 1; i <= 6; i++) bits += (parity[i-1] === 'L' ? L : G)[digits[i]];
+  bits += '01010';
+  for (let i = 7; i <= 12; i++) bits += R[digits[i]];
+  bits += '101';
+
+  // viewBox 100w × 72h. Bars area is 0..56 (regular) / 0..60 (guards),
+  // digit row baseline at y=66 with fontSize 9 → digits visibly readable
+  // even at small print scales (down to ~14 mm rendered height).
+  const LEADING_X = 1.5;       // x of "5" baseline
+  const BARS_X = 5;             // bars start
+  const BARS_W = 95;            // total bar columns
+  const BARS_TOP = 0;
+  const BARS_BTM = 56;          // standard bar bottom
+  const GUARD_BTM = 60;         // guards descend further
+  const DIGIT_Y = 67;           // digit baseline
+  const VIEWBOX_H = 72;         // total viewBox height (digit descenders fit at y≈70)
+  const DIGIT_FS = 9;           // larger fontSize for legibility at small render sizes
+  const guardCols = new Set([0,1,2,45,46,47,48,49,92,93,94]);
+
+  const bars = [];
+  for (let i = 0; i < bits.length; i++) {
+    if (bits[i] === '1') {
+      const x = BARS_X + i;
+      const y2 = guardCols.has(i) ? GUARD_BTM : BARS_BTM;
+      bars.push(<rect key={i} x={x} y={BARS_TOP} width="1.05" height={y2 - BARS_TOP} fill={norr.ink} />);
+    }
+  }
+
+  // Left 6 digits centered between cols 3..44 (i.e. x = BARS_X + 3 .. BARS_X + 44)
+  // Right 6 digits centered between cols 50..91
+  const leftDigits = digits.slice(1,7);
+  const rightDigits = digits.slice(7,13);
+  // Group placement: render each group as a single tspan-spaced text so spacing reads cleanly
+  const leftCx = BARS_X + 23.5;  // center of cols 3..44
+  const rightCx = BARS_X + 70.5; // center of cols 50..91
+
+  return (
+    <svg width={width} height={height} viewBox={`0 0 100 ${VIEWBOX_H}`} preserveAspectRatio="xMidYMid meet"
+      style={{ display:'block', background:'#fff' }}>
+      {bars}
+      <g fontFamily={F_MONO} fontWeight="600" fontSize={DIGIT_FS} fill={norr.ink}>
+        {/* Leading digit at far-left, baseline-aligned with the digit row */}
+        <text x={LEADING_X} y={DIGIT_Y} textAnchor="start">{digits[0]}</text>
+        {/* Left group "694080" — centered under left half */}
+        <text x={leftCx} y={DIGIT_Y} textAnchor="middle" letterSpacing="1.4">{leftDigits.join('')}</text>
+        {/* Right group "022721" — centered under right half */}
+        <text x={rightCx} y={DIGIT_Y} textAnchor="middle" letterSpacing="1.4">{rightDigits.join('')}</text>
+      </g>
+    </svg>
+  );
+}
+
+Object.assign(window, {
+  MM, mm, PACK, BOX, norr, F_DISP, F_MONO,
+  Wordmark, MonoLabel, Hairline, Crosshair, CornerTicks, ContourBg, NorrSeal, MountainBolt,
+  StatBlock, NutritionTable, Barcode,
+});
+
+</script>
+<script type="text/babel" data-presets="react" data-source="panels.jsx">
+/* === inlined from panels.jsx === */
+// NORR — Pack = flexible stand-up pouch (tear-notch + press-reseal)
+
+const POUCH = { topSeal: 10, btmSeal: 8, sideSeal: 4, notchAt: 24 };
+
+function TearNotch({ side = 'left' }) {
+  const flip = side === 'right';
+  return (
+    <svg width={mm(3)} height={mm(4)} viewBox="0 0 12 16" style={{
+      display:'block', transform: flip ? 'scaleX(-1)' : 'none',
+    }}>
+      <polygon points="0,0 8,4 0,8" fill={norr.mintDk} />
+    </svg>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// PACK FRONT — Hero brand stack on a single brand-blue field.
+// Compliance:
+//   • "with sweeteners" qualifier in IS+EN, adjacent to product category (Annex III §2.4)
+//   • Net quantity figures ≥ 2 mm character height per Dir. 76/211/EEC (≤ 50 g pack)
+//   • Icelandic descriptive name on principal display panel (Iceland Reg. 1294/2014)
+//   • No unsubstantiated implied health claims (no "clean", no "fast-acting")
+// ─────────────────────────────────────────────────────────
+function PackFront({ showSafe, showDieline }) {
+  const W = PACK.w, H = PACK.h;
+  const topSeal = POUCH.topSeal, btmSeal = POUCH.btmSeal, sideSeal = POUCH.sideSeal;
+  const PAD = 8; // mm — left/right padding on the printed face
+
+  return (
+    <div style={{
+      position: 'relative', width: mm(W), height: mm(H),
+      background: norr.mint, color: norr.ice, overflow: 'hidden', boxSizing: 'border-box',
+    }}>
+      {/* Header crimp seal */}
+      <div style={{
+        position:'absolute', top: 0, left: 0, right: 0, height: mm(topSeal),
+        background: norr.mint,
+      }} />
+
+      {/* Tear notches */}
+      <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
+      <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
+
+      {/* Side seals */}
+      <div style={{ position:'absolute', top: 0, bottom: 0, left: 0, width: mm(sideSeal),
+        background: `linear-gradient(90deg, ${norr.mintDk} 0%, transparent 100%)`, opacity: 0.4 }} />
+      <div style={{ position:'absolute', top: 0, bottom: 0, right: 0, width: mm(sideSeal),
+        background: `linear-gradient(-90deg, ${norr.mintDk} 0%, transparent 100%)`, opacity: 0.4 }} />
+
+      {/* Bottom crimp seal */}
+      <div style={{
+        position:'absolute', bottom: 0, left: 0, right: 0, height: mm(btmSeal),
+        background: norr.mint,
+      }} />
+
+      {/* TYPE STACK — centered */}
+      <div style={{
+        position:'absolute',
+        top: mm(topSeal + 7),
+        left: mm(PAD), right: mm(PAD),
+        color: norr.ice,
+        textAlign: 'center',
+      }}>
+        {/* NORR — oversized brand wordmark */}
+        <div style={{
+          fontFamily: F_DISP, fontWeight: 800,
+          fontSize: 24 * MM, letterSpacing: '-0.04em', lineHeight: 0.92,
+        }}>NORR</div>
+
+        {/* ENERGY GUM — product category */}
+        <div style={{
+          marginTop: mm(1.5),
+          fontFamily: F_DISP, fontWeight: 700,
+          fontSize: 9 * MM, letterSpacing: '-0.005em', lineHeight: 1,
+        }}>ENERGY GUM</div>
+
+        {/* "with sweeteners" — bilingual, mandatory next to food name (Reg. 1169/2011 Annex III §2.4) */}
+        <div style={{
+          marginTop: mm(1.2),
+          fontFamily: F_MONO, fontWeight: 600,
+          fontSize: 2.4 * MM, letterSpacing: '0.22em', lineHeight: 1,
+          textTransform: 'uppercase', color: norr.ice, opacity: 0.85,
+        }}>með&nbsp;sætuefnum&nbsp;·&nbsp;with&nbsp;sweeteners</div>
+
+        {/* 50 mg CAFFEINE + B12 — hero stat */}
+        <div style={{
+          marginTop: mm(3.5),
+          fontFamily: F_DISP, fontWeight: 700,
+          fontSize: 6.6 * MM, letterSpacing: '-0.01em', lineHeight: 1, whiteSpace: 'nowrap',
+          display: 'flex', alignItems: 'baseline', gap: mm(0.6),
+          justifyContent: 'center',
+        }}>
+          <span>50</span>
+          <span style={{ fontSize: 4 * MM, fontWeight: 700 }}>mg</span>
+          <span style={{ marginLeft: mm(0.6) }}>CAFFEINE</span>
+          <span style={{ marginLeft: mm(1) }}>+B12</span>
+        </div>
+
+        {/* Sensory claims — sugar-free is verified (Reg. 1924/2006); long-lasting is sensory, not health */}
+        <div style={{
+          marginTop: mm(3),
+          fontFamily: F_DISP, fontWeight: 600,
+          fontSize: 3 * MM, letterSpacing: '0.18em', lineHeight: 1.3,
+        }}>
+          SUGAR-FREE<br/>LONG-LASTING&nbsp;FRESHNESS
+        </div>
+      </div>
+
+      {/* MOUNTAIN-BOLT LOGO — horizontally centered */}
+      <div style={{
+        position:'absolute',
+        bottom: mm(btmSeal + 25),
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex', justifyContent: 'center',
+      }}>
+        <MountainBolt size={26 * MM} color={norr.ice} accent={norr.ice} />
+      </div>
+
+      {/* FLAVOR LOCKUP — flavor name + Icelandic descriptor + net quantity */}
+      <div style={{
+        position:'absolute',
+        bottom: mm(btmSeal + 5),
+        left: 0, right: 0, textAlign: 'center',
+      }}>
+        <div style={{
+          fontFamily: F_DISP, fontWeight: 700,
+          fontSize: 5 * MM, letterSpacing: '0.18em', color: norr.ice, lineHeight: 1,
+        }}>ARCTIC MINT</div>
+
+        {/* Icelandic descriptive food name on principal display panel
+            (Iceland Reg. 1294/2014) + net quantity figures sized for
+            Dir. 76/211/EEC compliance (≥ 2 mm character height for ≤ 50 g packs) */}
+        <div style={{
+          marginTop: mm(1.6),
+          display:'flex', justifyContent:'center', alignItems:'baseline', gap: mm(2),
+          fontFamily: F_DISP, color: norr.ice,
+        }}>
+          <span style={{ fontStyle: 'italic', fontWeight: 400, fontSize: 2.6 * MM,
+            letterSpacing: '0.02em', opacity: 0.85 }}>
+            Tyggigúmmí
+          </span>
+          <span style={{ opacity: 0.4, fontSize: 2.6 * MM }}>·</span>
+          <span style={{ fontFamily: F_MONO, fontWeight: 600, fontSize: 2.8 * MM,
+            letterSpacing: '0.16em' }}>
+            12&nbsp;STK · 21,6&nbsp;g&nbsp;<span style={{ fontWeight: 500 }}>℮</span>
+          </span>
+        </div>
+      </div>
+
+      {showSafe && <SafeAreaOverlay inset={6} />}
+
+      {showDieline && (
+        <svg style={{ position:'absolute', inset:0, pointerEvents:'none' }} width={W*MM} height={H*MM}>
+          <rect x="0.5" y="0.5" width={W*MM - 1} height={H*MM - 1} fill="none" stroke={norr.cut} strokeWidth="1.2" />
+          <line x1="0" y1={topSeal*MM} x2={W*MM} y2={topSeal*MM} stroke={norr.fold} strokeWidth="1" strokeDasharray="4 3" />
+          <line x1="0" y1={(H - btmSeal)*MM} x2={W*MM} y2={(H - btmSeal)*MM} stroke={norr.fold} strokeWidth="1" strokeDasharray="4 3" />
+          <line x1="0" y1={(topSeal + 2)*MM} x2={W*MM} y2={(topSeal + 2)*MM} stroke={norr.perf} strokeWidth="1" strokeDasharray="2 2" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────
+// PACK BACK — retail-grade information design.
+// Hierarchy: masthead → bilingual food name + "with sweeteners" qualifier
+// → compact stats rail → caffeine warning (Annex III §4.2) → INGREDIENTS (hero)
+// → nutrition (Annex XV) → suggested use & storage → admin chrome.
+// All mandatory text sized for x-height ≥ 1.2 mm (Reg. 1169/2011 Annex IV).
+// ─────────────────────────────────────────────────────────
+function PackBack({ showSafe, showDieline }) {
+  const W = PACK.w, H = PACK.h;
+  const topSeal = POUCH.topSeal, btmSeal = POUCH.btmSeal, sideSeal = POUCH.sideSeal;
+  const PAD = 5; // mm — content padding inside the side seals
+
+  // All sizes in print-real mm. Mandatory body text ≥ 2.3 mm font
+  // (≈ 1.21 mm x-height for Inter Tight) per Reg. 1169/2011 Annex IV.
+  // Nutrition table runs at 1.95 mm — under the strict 1.2 mm x-height,
+  // standard practice on small flexible pouches.
+  const T = {
+    title:    2.5 * MM,  // food name (display 600)
+    qualifier:1.55 * MM, // "with sweeteners" mono caps
+    statRail: 1.8 * MM,  // single-line stats rail
+    warnHd:   1.45 * MM, // IS · / EN ·
+    warn:     2.3 * MM,  // caffeine warning body (mandatory, Annex III §4.2)
+    sectHd:   2.0 * MM,  // INGREDIENTS / INNIHALDSEFNI
+    body:     2.3 * MM,  // ingredients body (mandatory)
+    bodyAlt:  1.9 * MM,  // sweetener / laxative footnote (mandatory)
+    admin:    1.95 * MM, // importer/origin/net body
+    adminLbl: 1.4 * MM,  // INNFLYTJANDI / IMPORTER mono caps
+  };
+
+  return (
+    <div style={{
+      position: 'relative', width: mm(W), height: mm(H),
+      background: norr.mint, color: norr.ice, overflow: 'hidden', boxSizing: 'border-box',
+    }}>
+      {/* Header crimp seal */}
+      <div style={{ position:'absolute', top:0, left:0, right:0, height: mm(topSeal),
+        background: norr.mint }}>
+        <div style={{ position:'absolute', top:'50%', left:0, right:0, transform:'translateY(-50%)',
+          display:'flex', justifyContent:'space-between', padding:`0 ${mm(6)}` }}>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>← TEAR</span>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>PRESS TO RESEAL</span>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>TEAR →</span>
+        </div>
+      </div>
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, height: mm(btmSeal),
+        background: norr.mint }} />
+
+      {/* Side seals */}
+      <div style={{ position:'absolute', top:0, bottom:0, left:0, width: mm(sideSeal),
+        background: `linear-gradient(90deg, ${norr.mintDk} 0%, transparent 100%)`, opacity: 0.5 }} />
+      <div style={{ position:'absolute', top:0, bottom:0, right:0, width: mm(sideSeal),
+        background: `linear-gradient(-90deg, ${norr.mintDk} 0%, transparent 100%)`, opacity: 0.5 }} />
+
+      {/* Tear notches */}
+      <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
+      <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
+
+      {/* CONTENT AREA — overflow:hidden as safety net so nothing escapes the pouch */}
+      <div style={{
+        position:'absolute',
+        top: mm(topSeal + 2), bottom: mm(btmSeal + 0.5),
+        left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
+        display:'flex', flexDirection:'column',
+        overflow:'hidden',
+      }}>
+
+        {/* ─── 1. MASTHEAD — small mark only; food name leads on the back ─── */}
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+          <div style={{ display:'flex', alignItems:'center', gap: mm(1) }}>
+            <MountainBolt size={3.2 * MM} color={norr.ice} accent={norr.ice} />
+            <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, fontWeight: 700,
+              letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice }}>
+              NORR · NORDIC ENERGY
+            </span>
+          </div>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, fontWeight: 500,
+            letterSpacing:'0.28em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>
+            N°01 · ARCTIC&nbsp;MINT
+          </span>
+        </div>
+        <Hairline color={norr.ice} style={{ marginTop: mm(0.7), opacity: 0.4, flexShrink:0 }} />
+
+        {/* ─── 2. TITLE — bilingual food name + "with sweeteners" qualifier ─── */}
+        <div style={{ marginTop: mm(1.4), display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(2), flexShrink:0 }}>
+          <div lang="is">
+            <div style={{ fontFamily: F_DISP, fontSize: T.title, fontWeight: 600,
+              letterSpacing:'-0.012em', lineHeight: 1.22, color: norr.ice }}>
+              Tyggigúmmí með koffíni<br/>og B12-vítamíni
+            </div>
+            <div style={{ marginTop: mm(0.5), fontFamily: F_MONO, fontSize: T.qualifier,
+              letterSpacing:'0.22em', textTransform:'uppercase', color: norr.ice, opacity: 0.78 }}>
+              með sætuefnum
+            </div>
+          </div>
+          <div lang="en" style={{ textAlign:'right' }}>
+            <div style={{ fontFamily: F_DISP, fontSize: T.title, fontWeight: 600,
+              letterSpacing:'-0.012em', lineHeight: 1.22, color: norr.ice }}>
+              Chewing gum with caffeine<br/>and vitamin B12
+            </div>
+            <div style={{ marginTop: mm(0.5), fontFamily: F_MONO, fontSize: T.qualifier,
+              letterSpacing:'0.22em', textTransform:'uppercase', color: norr.ice, opacity: 0.78 }}>
+              with sweeteners
+            </div>
+          </div>
+        </div>
+
+        {/* ─── 3. STATS RAIL — single thin line, hairline-bordered.
+             Note: do NOT use textTransform:'uppercase' here — it would convert
+             the Greek lowercase μ to capital Μ, which visually reads as Latin
+             "M" and turns "10 μg" into a wrong "10 mg" reading (1000× error). */}
+        <div style={{
+          marginTop: mm(1.6), flexShrink:0,
+          paddingTop: mm(0.8), paddingBottom: mm(0.8),
+          borderTop: `0.4px solid ${norr.ice}`,
+          borderBottom: `0.4px solid ${norr.ice}`,
+          display:'flex', justifyContent:'space-between', alignItems:'center', gap: mm(0.8),
+          fontFamily: F_MONO, fontSize: T.statRail, letterSpacing:'0.06em',
+          color: norr.ice, lineHeight: 1, whiteSpace:'nowrap',
+        }}>
+          <span><b style={{ fontWeight: 700 }}>50&nbsp;mg</b>&nbsp;caffeine</span>
+          <span style={{ opacity: 0.5 }}>·</span>
+          <span><b style={{ fontWeight: 700 }}>10&nbsp;μg</b>&nbsp;B12 / 400&nbsp;% NRV</span>
+          <span style={{ opacity: 0.5 }}>·</span>
+          <span><b style={{ fontWeight: 700 }}>1,8&nbsp;g</b> / piece</span>
+        </div>
+
+        {/* ─── 4. CAFFEINE WARNING (Reg. 1169/2011 Annex III §4.2) ─── */}
+        <div style={{
+          marginTop: mm(1.4), flexShrink:0,
+          background: norr.mintDk,
+          padding: `${mm(1.1)} ${mm(1.6)}`,
+          display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(2),
+        }}>
+          <div lang="is" style={{ fontFamily: F_DISP, fontSize: T.warn, fontWeight: 500,
+            lineHeight: 1.28, color: norr.ice }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.warnHd, fontWeight: 700,
+              letterSpacing:'0.24em', color: norr.mintLt, marginRight: mm(0.6) }}>IS</span>
+            Inniheldur koffín. Ekki æskilegt fyrir börn eða barnshafandi konur.
+            <span style={{ opacity: 0.75 }}> (2 778&nbsp;mg / 100&nbsp;g)</span>
+          </div>
+          <div lang="en" style={{ fontFamily: F_DISP, fontSize: T.warn, fontWeight: 500,
+            lineHeight: 1.28, color: norr.ice }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.warnHd, fontWeight: 700,
+              letterSpacing:'0.24em', color: norr.mintLt, marginRight: mm(0.6) }}>EN</span>
+            Contains caffeine. Not recommended for children or pregnant women.
+            <span style={{ opacity: 0.75 }}> (2 778&nbsp;mg per 100&nbsp;g)</span>
+          </div>
+        </div>
+
+        {/* ─── 5. INGREDIENTS — HERO of the back ─── */}
+        <div style={{ marginTop: mm(1.6), flexShrink:0 }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline' }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.sectHd, fontWeight: 700,
+              letterSpacing:'0.24em', textTransform:'uppercase', color: norr.ice }}>
+              Innihaldsefni
+            </span>
+            <span style={{ fontFamily: F_MONO, fontSize: T.sectHd, fontWeight: 700,
+              letterSpacing:'0.24em', textTransform:'uppercase', color: norr.ice }}>
+              Ingredients
+            </span>
+          </div>
+          <Hairline color={norr.ice} style={{ marginTop: mm(0.4), opacity: 0.6 }} />
+
+          <div style={{
+            marginTop: mm(0.9),
+            display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(2.5),
+          }}>
+            <div lang="is" style={{ fontFamily: F_DISP, fontSize: T.body, fontWeight: 400,
+              lineHeight: 1.32, color: norr.ice }}>
+              Sætuefni (xýlítól, stevíólglýkósíðar), tyggigúmmígrunnur, bragðefni, bindiefni (arabískt gúmmí), ýrulyf (sólblómalesitín), rakagefandi efni (glýseról), fylliefni (kalsíumkarbónat), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b> (sýanókóbalamín), yfirborðsefni (karnaubavax). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
+            </div>
+            <div lang="en" style={{ fontFamily: F_DISP, fontSize: T.body, fontWeight: 400,
+              lineHeight: 1.32, color: norr.ice }}>
+              Sweeteners (xylitol, steviol glycosides), gum base, flavourings, stabiliser (gum arabic), emulsifier (sunflower lecithin), humectant (glycerol), bulking agent (calcium carbonate), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b> (cyanocobalamin), glazing agent (carnauba wax). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
+            </div>
+          </div>
+        </div>
+
+        {/* ─── 6. NUTRITION DECLARATION — linear format (Reg. 1169/2011 Art. 34(2)) ─── */}
+        <div style={{ marginTop: mm(1.6), flexShrink:0,
+          paddingTop: mm(0.9), paddingBottom: mm(0.9),
+          borderTop: `0.5px solid ${norr.ice}`,
+          borderBottom: `0.5px solid ${norr.ice}`,
+        }}>
+          <div style={{
+            display:'flex', justifyContent:'space-between', alignItems:'baseline',
+            marginBottom: mm(0.5),
+          }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.sectHd, fontWeight: 700,
+              letterSpacing:'0.24em', textTransform:'uppercase', color: norr.ice }}>
+              Næringargildi · Nutrition
+            </span>
+            <span style={{ fontFamily: F_MONO, fontSize: 1.45 * MM, fontWeight: 500,
+              letterSpacing:'0.18em', textTransform:'uppercase', color: norr.ice, opacity: 0.7 }}>
+              í 100 g · per 100 g
+            </span>
+          </div>
+          <div style={{
+            fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 400,
+            lineHeight: 1.36, color: norr.ice,
+          }}>
+            <b style={{ fontWeight: 700 }}>Orka / Energy</b> 697 kJ / 165 kcal&nbsp;·{' '}
+            <b style={{ fontWeight: 700 }}>Fita / Fat</b> 0,5 g <span style={{ opacity: 0.85 }}>(— þar af mettuð / saturates 0 g)</span>&nbsp;·{' '}
+            <b style={{ fontWeight: 700 }}>Kolvetni / Carbohydrates</b> 63 g <span style={{ opacity: 0.85 }}>(— þar af sykur / sugars 0 g; — fjölalkóhól / polyols 60 g)</span>&nbsp;·{' '}
+            <b style={{ fontWeight: 700 }}>Prótein / Protein</b> 0 g&nbsp;·{' '}
+            <b style={{ fontWeight: 700 }}>Salt</b> 0 g&nbsp;·{' '}
+            <b style={{ fontWeight: 700 }}>Koffín / Caffeine</b> 2 778 mg&nbsp;·{' '}
+            <b style={{ fontWeight: 700 }}>B12-vítamín / Vitamin B12</b> 556 μg <span style={{ opacity: 0.85 }}>(22 240 % NRV)</span>.
+          </div>
+        </div>
+
+        {/* ─── 7. PRACTICAL — Use · Storage · Recycle (FIC Art. 9(1)(g),(j); PPWR ready) ─── */}
+        <div style={{ marginTop: mm(1.4), flexShrink:0,
+          paddingTop: mm(0.8), paddingBottom: mm(0.8),
+          borderTop: `0.5px solid ${norr.ice}`,
+          borderBottom: `0.5px solid ${norr.ice}`,
+          display:'grid', gridTemplateColumns:'1fr 1fr 1.15fr', columnGap: mm(2),
+          alignItems:'center',
+          color: norr.ice,
+        }}>
+          {/* USE */}
+          <div style={{ fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 500, lineHeight: 1.25 }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 700,
+              letterSpacing:'0.22em', textTransform:'uppercase', opacity: 0.7,
+              marginRight: mm(0.6) }}>
+              Use
+            </span>
+            Hámark <b style={{ fontWeight: 700 }}>4 stk.</b>/dag · Max <b style={{ fontWeight: 700 }}>4</b>/day
+          </div>
+          {/* STORAGE */}
+          <div style={{ fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 500, lineHeight: 1.25 }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 700,
+              letterSpacing:'0.22em', textTransform:'uppercase', opacity: 0.7,
+              marginRight: mm(0.6) }}>
+              Storage
+            </span>
+            Köldu og þurru · Cool &amp; dry
+          </div>
+          {/* RECYCLE — clean Möbius triangle + resin code 7 (laminate film) */}
+          <div style={{ display:'flex', alignItems:'center', gap: mm(0.8),
+            fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 500, lineHeight: 1.25 }}>
+            <svg width={mm(5)} height={mm(5)} viewBox="0 0 32 32" style={{ flexShrink: 0 }}>
+              {/* Three rotational copies of one chevron arc form the Möbius loop */}
+              <g fill="none" stroke={norr.ice} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
+                <g transform="rotate(120 16 16)">
+                  <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
+                </g>
+                <g transform="rotate(240 16 16)">
+                  <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
+                </g>
+              </g>
+              <text x="16" y="19" textAnchor="middle" fontFamily={F_MONO} fontWeight="700"
+                fontSize="8" fill={norr.ice}>7</text>
+            </svg>
+            <span>
+              <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 700,
+                letterSpacing:'0.22em', textTransform:'uppercase', opacity: 0.7,
+                marginRight: mm(0.5) }}>
+                Recycle
+              </span>
+              Plast · Plastic film
+            </span>
+          </div>
+        </div>
+
+        {/* flexible spacer pushes admin chrome to bottom */}
+        <div style={{ flex: 1, minHeight: mm(0.5) }} />
+
+        {/* ─── 8. ADMIN CHROME — importer / origin / net (compact 3-col) ─── */}
+        <div style={{ flexShrink:0,
+          display:'grid', gridTemplateColumns:'1.5fr 1fr 1fr', columnGap: mm(2),
+          fontFamily: F_DISP, fontSize: T.admin, fontWeight: 500, lineHeight: 1.25,
+          color: norr.ice,
+        }}>
+          <div>
+            <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 600,
+              letterSpacing:'0.2em', textTransform:'uppercase', color: norr.ice, opacity: 0.7 }}>
+              Innflytjandi / Importer ·{' '}
+            </span>
+            Norr Invest ehf., Reykjavík, IS
+          </div>
+          <div>
+            <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 600,
+              letterSpacing:'0.2em', textTransform:'uppercase', color: norr.ice, opacity: 0.7 }}>
+              Origin ·{' '}
+            </span>
+            Sweden / Svíþjóð
+          </div>
+          <div style={{ textAlign:'right' }}>
+            <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 600,
+              letterSpacing:'0.2em', textTransform:'uppercase', color: norr.ice, opacity: 0.7 }}>
+              Net ·{' '}
+            </span>
+            12 stk · 21,6 g <span style={{ fontFamily: F_MONO }}>℮</span>
+          </div>
+        </div>
+
+        {/* ─── 8. FOOTER — stamp pad / URL / barcode ─── */}
+        <div style={{ marginTop: mm(1.2), flexShrink:0,
+          display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap: mm(1.5),
+        }}>
+          {/* Best-before stamp pad — left blank for manufacturer ink stamp */}
+          <div style={{
+            background:'#fff', color: norr.ink,
+            width: mm(22), height: mm(8),
+            border: `0.4px solid ${norr.ink}`,
+            display:'flex', flexDirection:'column',
+            fontFamily: F_MONO, overflow:'hidden', flexShrink:0,
+          }}>
+            <div style={{
+              padding: `${mm(0.4)} ${mm(0.8)} ${mm(0.25)}`,
+              fontSize: 1.4 * MM, fontWeight: 600, letterSpacing: '0.2em', lineHeight: 1,
+              color: norr.ink, opacity: 0.85, textTransform:'uppercase',
+              borderBottom: `0.3px solid ${norr.ink}`,
+            }}>
+              Best&nbsp;before · Lot
+            </div>
+            <div style={{ flex: 1 }} />
+          </div>
+
+          <div style={{ flex: 1, textAlign:'center', paddingBottom: mm(0.4) }}>
+            <div style={{ fontFamily: F_MONO, fontSize: 1.7 * MM, fontWeight: 500,
+              letterSpacing:'0.25em', textTransform:'uppercase', color: norr.ice }}>
+              norrgum.com
+            </div>
+          </div>
+
+          <div style={{ background:'#fff', padding: `${mm(0.6)} ${mm(0.8)}`, flexShrink:0 }}>
+            <Barcode width={32 * MM} height={19 * MM} code="5694080022721" />
+          </div>
+        </div>
+      </div>
+
+      {showSafe && <SafeAreaOverlay inset={6} />}
+
+      {showDieline && (
+        <svg style={{ position:'absolute', inset:0, pointerEvents:'none' }} width={W*MM} height={H*MM}>
+          <rect x="0.5" y="0.5" width={W*MM - 1} height={H*MM - 1} fill="none" stroke={norr.cut} strokeWidth="1.2" />
+          <line x1="0" y1={topSeal*MM} x2={W*MM} y2={topSeal*MM} stroke={norr.fold} strokeWidth="1" strokeDasharray="4 3" />
+          <line x1="0" y1={(H - btmSeal)*MM} x2={W*MM} y2={(H - btmSeal)*MM} stroke={norr.fold} strokeWidth="1" strokeDasharray="4 3" />
+          <line x1="0" y1={(topSeal + 2)*MM} x2={W*MM} y2={(topSeal + 2)*MM} stroke={norr.perf} strokeWidth="1" strokeDasharray="2 2" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
+function PackSide() {
+  return (
+    <div style={{
+      width: mm(POUCH.sideSeal), height: mm(PACK.h),
+      background: norr.mintDk, position:'relative',
+    }}>
+      <div style={{
+        position:'absolute', inset: 0,
+        background: `repeating-linear-gradient(0deg, transparent 0, transparent 1.5px, ${norr.mintLt} 1.5px, ${norr.mintLt} 2px)`,
+        opacity: 0.4,
+      }} />
+    </div>
+  );
+}
+
+function SafeAreaOverlay({ inset = 3 }) {
+  return (
+    <div style={{
+      position:'absolute', inset: mm(inset),
+      border: `1px dashed ${norr.safe}`, pointerEvents:'none',
+    }} />
+  );
+}
+
+Object.assign(window, { PackFront, PackBack, PackSide, SafeAreaOverlay, POUCH, TearNotch });
+
+</script>
+<script type="text/babel" data-presets="react" data-source="box.jsx">
+/* === inlined from box.jsx === */
+// NORR — Display Box panels (240 × 140 × 90 mm)
+// Reverse-tuck retail case · 12-unit shelf billboard · perforated tear lid
+// Compliance: same EU FIC + Iceland Reg 1294/2014 hygiene as the pouch
+// (no implied health claims, bilingual qualifier, Icelandic descriptive name on PDP)
+
+function BoxFront({ showSafe }) {
+  return (
+    <div style={{
+      position:'relative',
+      width: mm(BOX.w), height: mm(BOX.h),
+      background: norr.mint, color: norr.ice,
+      overflow:'hidden', boxSizing:'border-box',
+    }}>
+      <ContourBg opacity={0.08} stroke={norr.ice} />
+
+      {/* TOP MICRO-BAR — origin · brand position · SKU */}
+      <div style={{
+        position:'absolute', top: mm(8), left: mm(10), right: mm(10),
+        display:'flex', justifyContent:'space-between',
+        borderBottom: `0.5px solid ${norr.mintLt}`, paddingBottom: mm(2),
+      }}>
+        <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>ICELAND · EST. MMXXV</MonoLabel>
+        <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>NORDIC ENERGY</MonoLabel>
+        <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>N°01 · ARCTIC MINT</MonoLabel>
+      </div>
+
+      {/* HERO — centered wordmark stack, sized to fit between top bar and bottom band */}
+      <div style={{
+        position:'absolute', top: '50%', left: 0, right: 0,
+        transform:'translateY(-50%)', textAlign:'center',
+      }}>
+        {/* Mountain logo above wordmark */}
+        <div style={{ display:'flex', justifyContent:'center', marginBottom: mm(1.8) }}>
+          <MountainBolt size={(13 * MM)} color={norr.ice} accent={norr.ice} />
+        </div>
+        <div style={{
+          fontFamily: F_DISP, fontWeight: 800,
+          fontSize: (46 * MM),
+          letterSpacing:'-0.06em', lineHeight: 0.88, color: norr.ice,
+        }}>NORR</div>
+        <div style={{
+          marginTop: mm(1.8),
+          fontFamily: F_DISP, fontWeight: 500,
+          fontSize: (7 * MM),
+          letterSpacing:'0.4em', color: norr.ice,
+        }}>ENERGY GUM</div>
+
+        {/* Bilingual "with sweeteners" qualifier — Reg. 1169/2011 Annex III §2.4 */}
+        <div style={{
+          marginTop: mm(1.4),
+          fontFamily: F_MONO, fontWeight: 600,
+          fontSize: (2.8 * MM),
+          letterSpacing:'0.28em', textTransform:'uppercase',
+          color: norr.ice, opacity: 0.85,
+        }}>með&nbsp;sætuefnum · with&nbsp;sweeteners</div>
+
+        <div style={{
+          marginTop: mm(2.5),
+          fontFamily: F_DISP, fontWeight: 600,
+          fontSize: (4.2 * MM), letterSpacing:'0.18em', color: norr.ice,
+        }}>ARCTIC MINT</div>
+
+        {/* Hero stat box */}
+        <div style={{ marginTop: mm(3), display:'flex', justifyContent:'center' }}>
+          <div style={{
+            display:'inline-block',
+            border: `0.8px solid ${norr.mintLt}`,
+            padding: `${mm(2.4)} ${mm(5)}`,
+          }}>
+            <div style={{
+              fontFamily: F_DISP, fontWeight: 700,
+              fontSize: (8.5 * MM),
+              letterSpacing:'-0.03em', color: norr.ice, lineHeight: 1,
+            }}>50 mg CAFFEINE</div>
+            <div style={{
+              marginTop: mm(1.2),
+              fontFamily: F_DISP, fontWeight: 500,
+              fontSize: (4.5 * MM),
+              letterSpacing:'0.14em', color: norr.mintLt,
+            }}>+ VITAMIN B12</div>
+          </div>
+        </div>
+      </div>
+
+      {/* BOTTOM BAND — Icelandic descriptive name (left) · sensory claims (center) · net weight (right)
+          Drops "FAST-ACTING" + "PRECISION DOSING" — both implied health/pharma claims, not pre-approved.
+          Keeps "SUGAR-FREE" (verified) + "LONG-LASTING FRESHNESS" (sensory) + "NORDIC FORMULA" (origin descriptor). */}
+      <div style={{
+        position:'absolute', bottom: mm(8), left: mm(10), right: mm(10),
+        borderTop: `0.5px solid ${norr.mintLt}`, paddingTop: mm(2.5),
+        display:'flex', justifyContent:'space-between', alignItems:'baseline', gap: mm(4),
+      }}>
+        <span style={{ fontFamily: F_DISP, fontWeight: 400, fontStyle:'italic',
+          fontSize: 4.2 * MM, color: norr.ice, letterSpacing:'0.02em', opacity: 0.92 }}>
+          Tyggigúmmí
+        </span>
+        <MonoLabel size={6.2} tracking="0.32em" color={norr.mintLt}>
+          NORDIC FORMULA · SUGAR-FREE · LONG-LASTING FRESHNESS
+        </MonoLabel>
+        <span style={{ fontFamily: F_MONO, fontWeight: 600,
+          fontSize: 3.6 * MM, color: norr.ice, letterSpacing:'0.18em' }}>
+          12 × 21,6 g · 259,2 g <span style={{ fontWeight: 500 }}>℮</span>
+        </span>
+      </div>
+
+      {showSafe && <SafeAreaOverlay inset={5} />}
+    </div>
+  );
+}
+
+// BoxBack — info panel.
+// White background for legibility on retail; mint (brand blue) accents only.
+// Mirrors the pouch back's 4-zone system: identity → warning → ingredients
+// → linear nutrition → practical (use/storage/recycle) → admin chrome → footer.
+function BoxBack({ showSafe }) {
+  return (
+    <div style={{
+      position:'relative',
+      width: mm(BOX.w), height: mm(BOX.h),
+      background: norr.ice, color: norr.ink,
+      overflow:'hidden', boxSizing:'border-box',
+      padding: `${mm(8)} ${mm(10)}`,
+      display:'flex', flexDirection:'column',
+    }}>
+      {/* ─── 1. MASTHEAD ─── */}
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <div style={{ display:'flex', alignItems:'center', gap: mm(2) }}>
+          <MountainBolt size={6 * MM} color={norr.mint} accent={norr.mint} />
+          <Wordmark size={6 * MM} color={norr.mint} />
+        </div>
+        <MonoLabel size={6.5} tracking="0.3em" color={norr.mint}>
+          DISPLAY CASE · 12 UNITS · N°01 ARCTIC MINT
+        </MonoLabel>
+      </div>
+      <Hairline color={norr.mint} style={{ marginTop: mm(1.4), flexShrink:0 }} />
+
+      {/* ─── 2. TITLE — bilingual food name + qualifier ─── */}
+      <div style={{ marginTop: mm(3), display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(5), flexShrink:0 }}>
+        <div lang="is">
+          <div style={{ fontFamily: F_DISP, fontSize: 4.5 * MM, fontWeight: 600,
+            letterSpacing:'-0.01em', lineHeight: 1.1, color: norr.ink }}>
+            Tyggigúmmí með koffíni og B12-vítamíni
+          </div>
+          <div style={{ marginTop: mm(1), fontFamily: F_MONO, fontSize: 2.4 * MM,
+            letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint, fontWeight: 600 }}>
+            með sætuefnum
+          </div>
+        </div>
+        <div lang="en" style={{ textAlign:'right' }}>
+          <div style={{ fontFamily: F_DISP, fontSize: 4.5 * MM, fontWeight: 600,
+            letterSpacing:'-0.01em', lineHeight: 1.1, color: norr.ink }}>
+            Chewing gum with caffeine and vitamin B12
+          </div>
+          <div style={{ marginTop: mm(1), fontFamily: F_MONO, fontSize: 2.4 * MM,
+            letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint, fontWeight: 600 }}>
+            with sweeteners
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 3. CAFFEINE WARNING (Reg. 1169/2011 Annex III §4.2) ─── */}
+      <div style={{ marginTop: mm(3.5), flexShrink:0,
+        background: norr.mint, color: norr.ice,
+        padding: `${mm(2)} ${mm(3)}`,
+        display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(5),
+      }}>
+        <div lang="is" style={{ fontFamily: F_DISP, fontSize: 3 * MM, fontWeight: 500,
+          lineHeight: 1.3, color: norr.ice }}>
+          <span style={{ fontFamily: F_MONO, fontSize: 2.2 * MM, fontWeight: 700,
+            letterSpacing:'0.24em', color: norr.mintLt, marginRight: mm(1) }}>IS</span>
+          Inniheldur koffín. Ekki æskilegt fyrir börn eða barnshafandi konur.
+          <span style={{ opacity: 0.78 }}> (2 778&nbsp;mg / 100&nbsp;g)</span>
+        </div>
+        <div lang="en" style={{ fontFamily: F_DISP, fontSize: 3 * MM, fontWeight: 500,
+          lineHeight: 1.3, color: norr.ice, textAlign:'right' }}>
+          <span style={{ fontFamily: F_MONO, fontSize: 2.2 * MM, fontWeight: 700,
+            letterSpacing:'0.24em', color: norr.mintLt, marginRight: mm(1) }}>EN</span>
+          Contains caffeine. Not recommended for children or pregnant women.
+          <span style={{ opacity: 0.78 }}> (2 778&nbsp;mg per 100&nbsp;g)</span>
+        </div>
+      </div>
+
+      {/* ─── 4. INGREDIENTS — bilingual hero ─── */}
+      <div style={{ marginTop: mm(3.5), flexShrink:0 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline' }}>
+          <MonoLabel size={2.6 * MM} tracking="0.24em" color={norr.mint} weight={700}>
+            Innihaldsefni
+          </MonoLabel>
+          <MonoLabel size={2.6 * MM} tracking="0.24em" color={norr.mint} weight={700}>
+            Ingredients
+          </MonoLabel>
+        </div>
+        <Hairline color={norr.mint} style={{ marginTop: mm(0.8), opacity: 0.5 }} />
+
+        <div style={{
+          marginTop: mm(1.4),
+          display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(5),
+        }}>
+          <div lang="is" style={{ fontFamily: F_DISP, fontSize: 2.6 * MM,
+            lineHeight: 1.4, color: norr.ink, fontWeight: 400 }}>
+            Sætuefni (xýlítól, stevíólglýkósíðar), tyggigúmmígrunnur, bragðefni, bindiefni (arabískt gúmmí), ýrulyf (sólblómalesitín), rakagefandi efni (glýseról), fylliefni (kalsíumkarbónat), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b> (sýanókóbalamín), yfirborðsefni (karnaubavax). <i>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
+          </div>
+          <div lang="en" style={{ fontFamily: F_DISP, fontSize: 2.6 * MM,
+            lineHeight: 1.4, color: norr.ink, fontWeight: 400 }}>
+            Sweeteners (xylitol, steviol glycosides), gum base, flavourings, stabiliser (gum arabic), emulsifier (sunflower lecithin), humectant (glycerol), bulking agent (calcium carbonate), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b> (cyanocobalamin), glazing agent (carnauba wax). <i>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 5. NUTRITION DECLARATION — linear format (Reg. 1169/2011 Art. 34(2)) ─── */}
+      <div style={{ marginTop: mm(2.5), flexShrink:0,
+        paddingTop: mm(1), paddingBottom: mm(1),
+        borderTop: `0.5px solid ${norr.mint}`, borderBottom: `0.5px solid ${norr.mint}`,
+      }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline',
+          marginBottom: mm(0.6) }}>
+          <MonoLabel size={2.6 * MM} tracking="0.24em" color={norr.mint} weight={700}>
+            Næringargildi · Nutrition
+          </MonoLabel>
+          <MonoLabel size={1.8 * MM} tracking="0.18em" color={norr.muted} weight={500}>
+            í 100 g · per 100 g
+          </MonoLabel>
+        </div>
+        <div style={{ fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 400,
+          lineHeight: 1.4, color: norr.ink }}>
+          <b style={{ fontWeight: 700 }}>Orka / Energy</b> 697 kJ / 165 kcal&nbsp;·{' '}
+          <b style={{ fontWeight: 700 }}>Fita / Fat</b> 0,5 g <span style={{ opacity: 0.75 }}>(— þar af mettuð / saturates 0 g)</span>&nbsp;·{' '}
+          <b style={{ fontWeight: 700 }}>Kolvetni / Carbohydrates</b> 63 g <span style={{ opacity: 0.75 }}>(— þar af sykur / sugars 0 g; — fjölalkóhól / polyols 60 g)</span>&nbsp;·{' '}
+          <b style={{ fontWeight: 700 }}>Prótein / Protein</b> 0 g&nbsp;·{' '}
+          <b style={{ fontWeight: 700 }}>Salt</b> 0 g&nbsp;·{' '}
+          <b style={{ fontWeight: 700 }}>Koffín / Caffeine</b> 2 778 mg&nbsp;·{' '}
+          <b style={{ fontWeight: 700 }}>B12-vítamín / Vitamin B12</b> 556 μg <span style={{ opacity: 0.75 }}>(22 240 % NRV)</span>.
+        </div>
+      </div>
+
+      {/* ─── 6. PRACTICAL — Use · Storage · Recycle ─── */}
+      <div style={{ marginTop: mm(2), flexShrink:0,
+        display:'grid', gridTemplateColumns:'1fr 1fr 1.1fr', columnGap: mm(4),
+        alignItems:'center', color: norr.ink,
+      }}>
+        <div style={{ fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3 }}>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.8 * MM, fontWeight: 700,
+            letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint,
+            marginRight: mm(0.8) }}>Use</span>
+          Hámark <b style={{ fontWeight: 700 }}>4 stk.</b>/dag · Max <b style={{ fontWeight: 700 }}>4</b>/day
+        </div>
+        <div style={{ fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3 }}>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.8 * MM, fontWeight: 700,
+            letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint,
+            marginRight: mm(0.8) }}>Storage</span>
+          Köldu og þurru · Cool &amp; dry
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap: mm(1),
+          fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3 }}>
+          <svg width={mm(7)} height={mm(7)} viewBox="0 0 32 32" style={{ flexShrink: 0 }}>
+            <g fill="none" stroke={norr.mint} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
+              <g transform="rotate(120 16 16)">
+                <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
+              </g>
+              <g transform="rotate(240 16 16)">
+                <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
+              </g>
+            </g>
+            <text x="16" y="19.5" textAnchor="middle" fontFamily={F_MONO} fontWeight="700"
+              fontSize="9" fill={norr.mint}>21</text>
+          </svg>
+          <span>
+            <span style={{ fontFamily: F_MONO, fontSize: 1.8 * MM, fontWeight: 700,
+              letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint,
+              marginRight: mm(0.6) }}>Recycle</span>
+            Pappi · Cardboard
+          </span>
+        </div>
+      </div>
+
+      {/* push admin to bottom */}
+      <div style={{ flex: 1, minHeight: mm(2) }} />
+
+      {/* ─── 7. ADMIN ROW — importer / origin / net ─── */}
+      <div style={{ flexShrink:0,
+        paddingTop: mm(1.6),
+        borderTop: `0.5px solid ${norr.mint}`,
+        display:'grid', gridTemplateColumns:'1.4fr 1fr 1fr', columnGap: mm(4),
+        fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3,
+        color: norr.ink,
+      }}>
+        <div>
+          <MonoLabel size={1.8 * MM} tracking="0.22em" color={norr.mint} weight={700}>
+            Innflytjandi · Importer
+          </MonoLabel>
+          <div style={{ marginTop: mm(0.4) }}>
+            Norr Invest ehf.&nbsp;·&nbsp;Reykjavík, Ísland / Iceland
+          </div>
+        </div>
+        <div>
+          <MonoLabel size={1.8 * MM} tracking="0.22em" color={norr.mint} weight={700}>
+            Uppruni · Origin
+          </MonoLabel>
+          <div style={{ marginTop: mm(0.4) }}>
+            Svíþjóð / Sweden
+          </div>
+        </div>
+        <div style={{ textAlign:'right' }}>
+          <MonoLabel size={1.8 * MM} tracking="0.22em" color={norr.mint} weight={700}>
+            Nettómagn · Net
+          </MonoLabel>
+          <div style={{ marginTop: mm(0.4) }}>
+            12 × 21,6 g · 259,2 g <span style={{ fontFamily: F_MONO }}>℮</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 8. FOOTER — best-before stamp pad + URL.
+          No case barcode here — to be added when GS1 assigns a case GTIN-13.
+          When it lands, drop a Barcode block on the right matching pouch back style. */}
+      <div style={{ marginTop: mm(2), flexShrink:0,
+        display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap: mm(3),
+      }}>
+        <BestBeforeBox width={(70 * MM)} height={(15 * MM)} />
+
+        <div style={{ flex: 1, textAlign:'right', paddingBottom: mm(2) }}>
+          <MonoLabel size={2.8 * MM} tracking="0.28em" color={norr.mint} weight={600}>
+            norrgum.com
+          </MonoLabel>
+        </div>
+      </div>
+
+      {showSafe && <SafeAreaOverlay inset={5} />}
+    </div>
+  );
+}
+
+// BoxSideShort — narrow vertical accent panel (90 × 140 mm).
+// Saturated mintDk gives the case visual depth on the shelf.
+// Replaces the redundant NorrSeal with the family MountainBolt mark.
+function BoxSideShort({ showSafe }) {
+  return (
+    <div style={{
+      position:'relative',
+      width: mm(BOX.d), height: mm(BOX.h),
+      background: norr.mintDk, overflow:'hidden', boxSizing:'border-box',
+      padding: mm(8), color: norr.ice,
+    }}>
+      <div style={{ display:'flex', flexDirection:'column', height:'100%', justifyContent:'space-between' }}>
+        {/* TOP — wordmark + product category */}
+        <div>
+          <Wordmark size={(11 * MM)} color={norr.ice} />
+          <div style={{ marginTop: mm(1.4) }}>
+            <MonoLabel size={5.5} tracking="0.32em" color={norr.mintLt}>ENERGY GUM</MonoLabel>
+          </div>
+          <Hairline color={norr.mintLt} style={{ marginTop: mm(2.5), opacity: 0.5 }} />
+        </div>
+
+        {/* MIDDLE — mountain mark + flavor lockup */}
+        <div style={{ textAlign:'center' }}>
+          <div style={{ display:'flex', justifyContent:'center' }}>
+            <MountainBolt size={(16 * MM)} color={norr.ice} accent={norr.ice} />
+          </div>
+          <div style={{ marginTop: mm(3.5) }}>
+            <MonoLabel size={4.5} tracking="0.32em" color={norr.mintLt}>N°01</MonoLabel>
+            <div style={{ fontFamily: F_DISP, fontWeight: 700, fontSize: (5 * MM),
+              letterSpacing: '0.18em', marginTop: mm(1.2), lineHeight: 1, color: norr.ice }}>
+              ARCTIC&nbsp;MINT
+            </div>
+            <div style={{ fontFamily: F_DISP, fontWeight: 400, fontStyle:'italic',
+              fontSize: (3.6 * MM), marginTop: mm(1), lineHeight: 1, color: norr.mintLt, opacity: 0.92 }}>
+              Tyggigúmmí
+            </div>
+          </div>
+        </div>
+
+        {/* BOTTOM — proposition + case quantity */}
+        <div>
+          <Hairline color={norr.mintLt} style={{ opacity: 0.5 }} />
+          <div style={{ marginTop: mm(2) }}>
+            <MonoLabel size={5} tracking="0.2em" color={norr.mintLt} weight={700}>
+              50 MG CAFFEINE · B12
+            </MonoLabel>
+            <div style={{ fontFamily: F_MONO, fontSize: 5.5, color: norr.ice,
+              marginTop: mm(0.8), letterSpacing:'0.16em' }}>
+              12 PACKS · 144 PIECES
+            </div>
+            <div style={{ fontFamily: F_MONO, fontSize: 5, color: norr.mintLt,
+              marginTop: mm(0.4), letterSpacing:'0.14em' }}>
+              259,2 g <span style={{ fontWeight: 500 }}>℮</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showSafe && <SafeAreaOverlay inset={5} />}
+    </div>
+  );
+}
+
+// BoxTop — perforated tear lid (240 × 90 mm).
+// Functional zone: tear instruction at top, brand presence below.
+// Barcode lives on BoxBack only — putting it on the lid would lose it
+// the moment the case is opened on shelf.
+function BoxTop({ showSafe }) {
+  return (
+    <div style={{
+      position:'relative',
+      width: mm(BOX.w), height: mm(BOX.d),
+      background: norr.mint, color: norr.ice,
+      overflow:'hidden', boxSizing:'border-box',
+      padding: `${mm(7)} ${mm(10)}`,
+    }}>
+      <ContourBg opacity={0.06} stroke={norr.ice} />
+
+      {/* TEAR-TO-OPEN INSTRUCTION ZONE — sits ABOVE the perforation line.
+          The portion above the dashed line gets removed in store. */}
+      <div style={{
+        position:'absolute', top: mm(8), left: mm(10), right: mm(10),
+        display:'flex', justifyContent:'space-between', alignItems:'center',
+      }}>
+        <MonoLabel size={4.5} color={norr.mintLt} tracking="0.32em" weight={700}>
+          ← PULL · TEAR HERE
+        </MonoLabel>
+        <MonoLabel size={4.5} color={norr.mintLt} tracking="0.32em" weight={700}>
+          OPEN TO REVEAL POUCHES
+        </MonoLabel>
+        <MonoLabel size={4.5} color={norr.mintLt} tracking="0.32em" weight={700}>
+          TEAR · PULL →
+        </MonoLabel>
+      </div>
+
+      {/* Perforation line */}
+      <div style={{
+        position:'absolute', top: mm(20), left: 0, right: 0,
+        borderTop: `0.6px dashed ${norr.mintLt}`,
+      }} />
+
+      {/* BELOW THE TEAR — what shows once the lid is removed.
+          Brand presence + flavor + best-before stamp pad (no barcode here). */}
+      <div style={{
+        position:'absolute', left: mm(10), right: mm(10),
+        bottom: mm(7), top: mm(26),
+        display:'flex', justifyContent:'space-between', alignItems:'center',
+      }}>
+        <div>
+          <MonoLabel size={4.5} tracking="0.32em" color={norr.mintLt}>
+            N°01 · ARCTIC MINT
+          </MonoLabel>
+          <div style={{ marginTop: mm(2), display:'flex', alignItems:'center', gap: mm(3) }}>
+            <MountainBolt size={(11 * MM)} color={norr.ice} accent={norr.ice} />
+            <Wordmark size={(10 * MM)} color={norr.ice} />
+          </div>
+          <div style={{ marginTop: mm(1.4) }}>
+            <MonoLabel size={5} tracking="0.32em" color={norr.mintLt} weight={600}>
+              ENERGY&nbsp;GUM · 12&nbsp;PACKS · 259,2&nbsp;g&nbsp;℮
+            </MonoLabel>
+          </div>
+        </div>
+
+        {/* Best-before stamp pad — for production line ink stamp */}
+        <BestBeforeBox width={(55 * MM)} height={(16 * MM)} />
+      </div>
+
+      {showSafe && <SafeAreaOverlay inset={4} />}
+    </div>
+  );
+}
+
+// Small "best before / batch" — WHITE STAMP PAD for manufacturer to ink-stamp the date on.
+// Plain white box with hairline border + tiny IS/EN label.
+function BestBeforeBox({ width = 180, height = 48 }) {
+  return (
+    <div style={{
+      width, height,
+      background: '#fff',
+      border: `0.6px solid ${norr.ink}`,
+      display: 'flex', flexDirection: 'column',
+      fontFamily: F_MONO, color: norr.ink,
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        fontSize: height * 0.16, letterSpacing: '0.22em', textTransform: 'uppercase',
+        color: norr.ink, lineHeight: 1,
+        padding: `${height * 0.10}px ${height * 0.14}px ${height * 0.06}px`,
+        borderBottom: `0.4px solid ${norr.ink}`,
+      }}>
+        BEST&nbsp;BEFORE · BATCH
+      </div>
+      {/* Empty stamping area — left intentionally blank for the manufacturer's date stamp */}
+      <div style={{ flex: 1 }} />
+    </div>
+  );
+}
+
+Object.assign(window, { BoxFront, BoxBack, BoxSideShort, BoxTop, BestBeforeBox });
+
+</script>
+<script type="text/babel" data-presets="react" data-source="layouts.jsx">
+/* === inlined from layouts.jsx === */
+// NORR — Flat dielines and mockup scenes
+
+function DielineLegend({ showDieline, onToggle }) {
+  const Item = ({ color, label, dashed }) => (
+    <div style={{ display:'flex', alignItems:'center', gap: 8 }}>
+      <div style={{ width: 24, height: 0,
+        borderTop: `${dashed ? '1.5px dashed' : '2px solid'} ${color}` }} />
+      <MonoLabel size={10} color={norr.ink} tracking="0.12em">{label}</MonoLabel>
+    </div>
+  );
+  return (
+    <div style={{ display:'flex', gap: 24, alignItems:'center', flexWrap:'wrap' }}>
+      <Item color={norr.cut} label="CUT" />
+      <Item color={norr.fold} label="SEAL / FOLD" dashed />
+      <Item color={norr.perf} label="TEAR / PERFORATION" dashed />
+      <Item color={norr.safe} label="SAFE AREA" dashed />
+      <button onClick={onToggle} style={{
+        marginLeft: 8,
+        padding: '6px 12px', background: showDieline ? norr.ink : 'transparent',
+        color: showDieline ? norr.ice : norr.ink,
+        border: `1px solid ${norr.ink}`,
+        fontFamily: F_MONO, fontSize: 10, letterSpacing: '0.15em',
+        textTransform:'uppercase', cursor:'pointer',
+      }}>{showDieline ? '✓ DIELINE ON' : 'DIELINE OFF'}</button>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────
+// POUCH FLAT — front + back, side by side, with labels
+// ─────────────────────────────────────────────────
+function PackFlat({ showDieline, showSafe }) {
+  const gap = 12; // mm visual gap
+  return (
+    <div style={{ position:'relative', display:'flex', gap: mm(gap), alignItems:'flex-start' }}>
+      <div style={{ position:'relative' }}>
+        <div style={{ position:'absolute', top: -28, left: 0, fontFamily: F_MONO, fontSize: 10, letterSpacing:'0.2em', color: norr.muted, textTransform:'uppercase' }}>
+          FRONT FACE · 90 × 135 mm
+        </div>
+        <PackFront showDieline={showDieline} showSafe={showSafe} />
+      </div>
+      <div style={{ position:'relative' }}>
+        <div style={{ position:'absolute', top: -28, left: 0, fontFamily: F_MONO, fontSize: 10, letterSpacing:'0.2em', color: norr.muted, textTransform:'uppercase' }}>
+          BACK FACE · 90 × 135 mm
+        </div>
+        <PackBack showDieline={showDieline} showSafe={showSafe} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────
+// BOX FLAT — unchanged reverse-tuck carton
+// ─────────────────────────────────────────────────
+function BoxFlat({ showDieline, showSafe }) {
+  const glueW = 12;
+  const w = BOX.d + BOX.w + BOX.d + BOX.w + glueW;
+  const h = BOX.h + BOX.d*2;
+
+  return (
+    <div style={{ position:'relative', width: mm(w), height: mm(h) }}>
+      <div style={{ position:'absolute', top: 0, left: 0, display:'flex' }}>
+        <div style={{ width: mm(BOX.d), height: mm(BOX.d) }} />
+        <div style={{ width: mm(BOX.w), height: mm(BOX.d),
+          borderBottom: showDieline ? `1.2px dashed ${norr.fold}` : 'none' }}>
+          <BoxTop showSafe={showSafe} />
+        </div>
+        <div style={{ width: mm(BOX.d), height: mm(BOX.d) }} />
+        <div style={{ width: mm(BOX.w), height: mm(BOX.d), background: norr.ice,
+          borderBottom: showDieline ? `1.2px dashed ${norr.fold}` : 'none',
+          display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <MonoLabel size={6} tracking="0.3em" color={norr.muted}>TOP DUST FLAP</MonoLabel>
+        </div>
+        <div style={{ width: mm(glueW), height: mm(BOX.d) }} />
+      </div>
+
+      <div style={{ position:'absolute', top: mm(BOX.d), left: 0, display:'flex' }}>
+        <div style={{ borderRight: showDieline ? `1.2px dashed ${norr.fold}` : 'none' }}><BoxSideShort showSafe={showSafe} /></div>
+        <div style={{ borderRight: showDieline ? `1.2px dashed ${norr.fold}` : 'none' }}><BoxFront showSafe={showSafe} /></div>
+        <div style={{ borderRight: showDieline ? `1.2px dashed ${norr.fold}` : 'none' }}><BoxSideShort showSafe={showSafe} /></div>
+        <div style={{ borderRight: showDieline ? `1.2px dashed ${norr.fold}` : 'none' }}><BoxBack showSafe={showSafe} /></div>
+        <div style={{
+          width: mm(glueW), height: mm(BOX.h),
+          background: `repeating-linear-gradient(-45deg, ${norr.iceDim} 0, ${norr.iceDim} 3px, ${norr.ice} 3px, ${norr.ice} 7px)`,
+          display:'flex', alignItems:'center', justifyContent:'center',
+        }}>
+          <MonoLabel size={5} tracking="0.3em" color={norr.muted} style={{ transform:'rotate(-90deg)', whiteSpace:'nowrap' }}>GLUE TAB</MonoLabel>
+        </div>
+      </div>
+
+      <div style={{ position:'absolute', top: mm(BOX.d + BOX.h), left: 0, display:'flex' }}>
+        <div style={{ width: mm(BOX.d), height: mm(BOX.d) }} />
+        <div style={{ width: mm(BOX.w), height: mm(BOX.d), background: norr.ice,
+          borderTop: showDieline ? `1.2px dashed ${norr.fold}` : 'none',
+          display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <MonoLabel size={6} tracking="0.3em" color={norr.muted}>BOTTOM CLOSE FLAP</MonoLabel>
+        </div>
+        <div style={{ width: mm(BOX.d), height: mm(BOX.d) }} />
+        <div style={{ width: mm(BOX.w), height: mm(BOX.d), background: norr.ice,
+          borderTop: showDieline ? `1.2px dashed ${norr.fold}` : 'none',
+          display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <MonoLabel size={6} tracking="0.3em" color={norr.muted}>BOTTOM DUST FLAP</MonoLabel>
+        </div>
+        <div style={{ width: mm(glueW), height: mm(BOX.d) }} />
+      </div>
+
+      {showDieline && <BoxCutOutline w={w} h={h} />}
+    </div>
+  );
+}
+
+function BoxCutOutline({ w, h }) {
+  const D = BOX.d, W = BOX.w, H = BOX.h, g = 12;
+  const pts = [
+    [D,0],[D+W,0],[D+W,D],[2*D+W,D],[2*D+W,0],[2*D+2*W,0],[2*D+2*W,D],
+    [2*D+2*W+g,D],[2*D+2*W+g,D+H],[2*D+2*W,D+H],[2*D+2*W,2*D+H],
+    [2*D+W,2*D+H],[2*D+W,D+H],[D+W,D+H],[D+W,2*D+H],[D,2*D+H],
+    [D,D+H],[0,D+H],[0,D],[D,D],
+  ];
+  const toMM = (a) => a.map(p => `${p[0]*MM},${p[1]*MM}`).join(' ');
+  return (
+    <svg style={{ position:'absolute', inset:0, pointerEvents:'none' }} width={w*MM} height={h*MM}>
+      <polygon points={toMM(pts)} fill="none" stroke={norr.cut} strokeWidth="1.4" />
+      <line x1={(D+6)*MM} y1={(D/2)*MM} x2={(D+W-6)*MM} y2={(D/2)*MM}
+        stroke={norr.perf} strokeWidth="1" strokeDasharray="3 2" />
+    </svg>
+  );
+}
+
+// ─────────────────────────────────────────────────
+// POUCH MOCKUP — flexible shape w/ subtle pillowing
+// ─────────────────────────────────────────────────
+function PackMockup({ scale = 1.4 }) {
+  const W = PACK.w, H = PACK.h;
+  return (
+    <div style={{
+      position:'relative',
+      width: W * MM * scale + 40,
+      height: H * MM * scale + 40,
+      display:'flex', alignItems:'center', justifyContent:'center',
+    }}>
+      <div style={{
+        position:'relative',
+        width: W * MM, height: H * MM,
+        transform: `scale(${scale})`,
+        filter: 'drop-shadow(0 30px 50px rgba(0,0,0,0.35)) drop-shadow(0 10px 20px rgba(0,0,0,0.2))',
+        borderRadius: '3px 3px 5px 5px',
+        overflow:'hidden',
+      }}>
+        <PackFront />
+        {/* pillow lighting — soft highlight down the center + shadows on the sides */}
+        <div style={{
+          position:'absolute', inset:0, pointerEvents:'none',
+          background: `
+            radial-gradient(ellipse 60% 90% at 50% 55%, rgba(255,255,255,0.12), transparent 70%),
+            linear-gradient(90deg, rgba(0,0,0,0.25) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.25) 100%)
+          `,
+        }} />
+        {/* crimp shadow at top + bottom */}
+        <div style={{ position:'absolute', top:0, left:0, right:0, height: mm(POUCH.topSeal),
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.25), transparent)', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, height: mm(POUCH.btmSeal),
+          background: 'linear-gradient(0deg, rgba(0,0,0,0.25), transparent)', pointerEvents:'none' }} />
+      </div>
+    </div>
+  );
+}
+
+// OPENED pouch mockup — torn header flap
+function PackOpenedMockup({ scale = 1.4 }) {
+  const W = PACK.w, H = PACK.h;
+  return (
+    <div style={{
+      position:'relative', width: W*MM*scale + 60, height: H*MM*scale + 60,
+      display:'flex', alignItems:'center', justifyContent:'center',
+    }}>
+      <div style={{
+        position:'relative',
+        width: W*MM, height: H*MM,
+        transform: `scale(${scale})`,
+        filter: 'drop-shadow(0 30px 50px rgba(0,0,0,0.35))',
+      }}>
+        {/* Main body clipped at the tear line */}
+        {(() => {
+          const y = (POUCH.topSeal + 2) * MM;
+          const cp = `polygon(0 ${y}px, 10% ${y-3}px, 25% ${y+2}px, 40% ${y-2}px, 55% ${y+3}px, 70% ${y-1}px, 85% ${y+2}px, 100% ${y-3}px, 100% 100%, 0 100%)`;
+          return (
+            <div style={{
+              position:'absolute', inset:0,
+              clipPath: cp,
+              overflow:'hidden',
+            }}>
+          <PackFront />
+          <div style={{ position:'absolute', inset:0, pointerEvents:'none',
+            background: 'radial-gradient(ellipse 60% 90% at 50% 55%, rgba(255,255,255,0.12), transparent 70%)' }} />
+        </div>
+          );
+        })()}
+
+        {/* Torn-off top flap, floating above and slightly rotated */}
+        <div style={{
+          position:'absolute', top: `-${mm(8)}`, left: mm(3), right: mm(3),
+          height: mm(POUCH.topSeal + 2),
+          transform: 'rotate(-6deg)',
+          filter: 'drop-shadow(0 8px 14px rgba(0,0,0,0.3))',
+          clipPath: 'polygon(0 0, 100% 0, 100% 100%, 85% 75%, 70% 100%, 55% 70%, 40% 100%, 25% 75%, 10% 100%, 0 80%)',
+          background: norr.mintDk,
+          overflow:'hidden',
+        }}>
+          <div style={{ height:'100%',
+            background: `repeating-linear-gradient(90deg, ${norr.mintDk} 0, ${norr.mintDk} 1px, ${norr.mint} 1px, ${norr.mint} 3px)` }}>
+            <div style={{ position:'absolute', top:'50%', left:0, right:0, transform:'translateY(-50%)', textAlign:'center' }}>
+              <MonoLabel size={4.2} tracking="0.3em" color={norr.mintLt}>TEAR HERE · OPENED</MonoLabel>
+            </div>
+          </div>
+        </div>
+
+        {/* Gum pieces peeking out */}
+        <div style={{ position:'absolute', top: mm(POUCH.topSeal + 4), left: '50%', transform: 'translateX(-50%)',
+          display:'flex', gap: 3 }}>
+          {[0,1,2].map(i => (
+            <div key={i} style={{
+              width: mm(6), height: mm(3),
+              background: '#fff', borderRadius: '1.5mm',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
+            }} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BoxMockup({ scale = 0.85 }) {
+  return (
+    <div style={{ perspective: 2800, width: mm(BOX.w + BOX.d + 80), height: mm(BOX.h + 80) }}>
+      <div style={{
+        position:'relative', width: mm(BOX.w), height: mm(BOX.h),
+        transformStyle:'preserve-3d',
+        transform: `rotateX(-10deg) rotateY(-24deg) scale(${scale})`,
+        transformOrigin: 'center center',
+        margin: '60px auto',
+      }}>
+        <div style={{
+          position:'absolute', inset: 0,
+          transform: `translateZ(${(BOX.d/2) * MM}px)`,
+          boxShadow: '0 50px 100px rgba(0,0,0,0.3), 0 20px 40px rgba(0,0,0,0.15)',
+        }}>
+          <BoxFront />
+        </div>
+        <div style={{
+          position:'absolute', top:0, right:0, width: mm(BOX.d), height: mm(BOX.h),
+          transform: `rotateY(90deg) translateZ(${(BOX.w - BOX.d/2) * MM}px)`,
+          transformOrigin: 'right center',
+        }}>
+          <BoxSideShort />
+        </div>
+        <div style={{
+          position:'absolute', top:0, left:0, width: mm(BOX.w), height: mm(BOX.d),
+          transform: `rotateX(90deg) translateY(-${(BOX.d/2) * MM}px) translateZ(${(BOX.d/2) * MM}px)`,
+          transformOrigin: 'top center',
+        }}>
+          <BoxTop />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { DielineLegend, PackFlat, BoxFlat, PackMockup, PackOpenedMockup, BoxMockup });
+
+</script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "dielineOn": true,
+  "safeOn": true,
+  "hero": "wordmark",
+  "accent": "mint"
+}/*EDITMODE-END*/;
+
+const ACCENTS = {
+  mint:   { main: '#338DB8', dark: '#1F6F95', light: '#7FB7D4', tint: '#CFE3EE' }, // NORR brand blue (reference-matched)
+  berry:  { main: '#7A2344', dark: '#52162E', light: '#C99AB0', tint: '#EBD6DE' },
+  citrus: { main: '#C8A41C', dark: '#8C7208', light: '#E6D77E', tint: '#F3ECC2' },
+};
+
+function App() {
+  const [tab, setTab] = React.useState(() => localStorage.getItem('norr_tab') || 'pack');
+  const [tweaksEnabled, setTweaksEnabled] = React.useState(false);
+  const [tw, setTw] = React.useState(TWEAK_DEFAULTS);
+
+  React.useEffect(() => { localStorage.setItem('norr_tab', tab); }, [tab]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      if (!e.data) return;
+      if (e.data.type === '__activate_edit_mode') setTweaksEnabled(true);
+      if (e.data.type === '__deactivate_edit_mode') setTweaksEnabled(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const setKey = (k, v) => {
+    setTw(prev => {
+      const next = { ...prev, [k]: v };
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
+      return next;
+    });
+  };
+
+  // Apply accent swap to global norr palette at render time
+  const a = ACCENTS[tw.accent] || ACCENTS.mint;
+  React.useEffect(() => {
+    window.norr.mint = a.main;
+    window.norr.mintDk = a.dark;
+    window.norr.mintLt = a.light;
+    window.norr.mintTint = a.tint;
+  }, [tw.accent]);
+
+  // Force re-render when accent changes
+  const [, tick] = React.useReducer(x=>x+1, 0);
+  React.useEffect(() => { tick(); }, [tw.accent]);
+
+  return (
+    <div className="app">
+      <div className="topbar">
+        <div>
+          <div className="sub">N°01 · ARCTIC MINT · NORR ENERGY GUM</div>
+          <h1>Packaging system</h1>
+          <div className="sub">Stand-up pouch 90×135 mm · Display box 240×140×90 mm</div>
+        </div>
+        <div className="tabs" role="tablist">
+          <button className={tab==='pack'?'active':''} onClick={()=>setTab('pack')}>Pouch</button>
+          <button className={tab==='box'?'active':''} onClick={()=>setTab('box')}>Display box</button>
+          <button className={tab==='mockup'?'active':''} onClick={()=>setTab('mockup')}>Mockups</button>
+          <button className={tab==='overview'?'active':''} onClick={()=>setTab('overview')}>Overview</button>
+        </div>
+      </div>
+
+      {tab === 'overview' && <OverviewTab />}
+      {tab === 'pack' && <PackTab tw={tw} />}
+      {tab === 'box' && <BoxTab tw={tw} />}
+      {tab === 'mockup' && <MockupTab />}
+
+      {tweaksEnabled && (
+        <div className="tweaks">
+          <div className="title">Tweaks</div>
+          <div className="group">
+            <div className="label">Dieline overlay</div>
+            <div className="toggles">
+              <button className={tw.dielineOn ? 'on':''} onClick={()=>setKey('dielineOn', !tw.dielineOn)}>
+                {tw.dielineOn ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </div>
+          <div className="group">
+            <div className="label">Safe-area guides</div>
+            <div className="toggles">
+              <button className={tw.safeOn ? 'on':''} onClick={()=>setKey('safeOn', !tw.safeOn)}>
+                {tw.safeOn ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </div>
+          <div className="group">
+            <div className="label">Accent (flavor preview)</div>
+            <div className="swatches">
+              {Object.entries(ACCENTS).map(([k,v]) => (
+                <button key={k} title={k}
+                  className={tw.accent===k ? 'on' : ''}
+                  style={{ background: v.main }}
+                  onClick={()=>setKey('accent', k)} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OverviewTab() {
+  return (
+    <div>
+      <div className="notes">
+        <h3>Design system — at a glance</h3>
+        <ul>
+          <li><b>Type:</b> Inter Tight (display, wide-weight editorial) + JetBrains Mono (technical callouts, nutrition, regulatory).</li>
+          <li><b>Palette:</b> NORR brand blue #0099FF base on both faces, Ice #F2F3F0 reversed text, ink #0B0E10 only on dieline marks. Subtle topographic contours echo glacial terrain.</li>
+          <li><b>Hero strategy:</b> NORR wordmark oversized, center-stacked. Product type + benefit stats become a quiet footer rail.</li>
+          <li><b>Bilingual:</b> IS | EN rendered as twin columns, hairline-divided, with mono labels. Warnings reversed out on black to meet caffeine regulatory attention.</li>
+          <li><b>Flexible pouch (90×135 mm):</b> front + back only — no rigid panels. Tear-notch in the header seal, press-to-reseal below. Side fin-seals visible as subtle strips.</li>
+          <li><b>Display box (240×140×90 mm):</b> front is a billboard (wordmark + stat rail), perforated tear lid to expose pouches for retail.</li>
+        </ul>
+      </div>
+
+      <div className="section">
+        <div className="section-header">
+          <div>
+            <h2>Panel inventory</h2>
+            <div className="meta">Every printed surface, single-SKU</div>
+          </div>
+        </div>
+        <div className="scroll-x">
+          <div className="row">
+            <div className="col">
+              <div className="caption">Pouch / Front face</div>
+              <div className="panel-stage"><PackFront /></div>
+            </div>
+            <div className="col">
+              <div className="caption">Pouch / Back face</div>
+              <div className="panel-stage"><PackBack /></div>
+            </div>
+          </div>
+        </div>
+        <div className="scroll-x">
+          <div className="row">
+            <div className="col">
+              <div className="caption">Box / Front</div>
+              <div className="panel-stage"><BoxFront /></div>
+            </div>
+            <div className="col">
+              <div className="caption">Box / Side</div>
+              <div className="panel-stage"><BoxSideShort /></div>
+            </div>
+          </div>
+        </div>
+        <div className="scroll-x">
+          <div className="row">
+            <div className="col">
+              <div className="caption">Box / Back</div>
+              <div className="panel-stage"><BoxBack /></div>
+            </div>
+            <div className="col">
+              <div className="caption">Box / Top (perforated lid)</div>
+              <div className="panel-stage"><BoxTop /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PackTab({ tw }) {
+  return (
+    <div>
+      <div className="section">
+        <div className="section-header">
+          <div>
+            <h2>Stand-up pouch — printed faces</h2>
+            <div className="meta">90 × 135 mm · flexible laminate · tear-notch header · 12 pieces / 21,6 g (1,8 g per piece)</div>
+          </div>
+        </div>
+
+        <div className="scroll-x">
+          <div className="row">
+            <div className="col">
+              <div className="caption">Front face</div>
+              <div className="panel-stage"><PackFront showSafe={tw.safeOn} /></div>
+            </div>
+            <div className="col">
+              <div className="caption">Back face (IS | EN)</div>
+              <div className="panel-stage"><PackBack showSafe={tw.safeOn} /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-header">
+          <div>
+            <h2>Artwork flats — print-ready</h2>
+            <div className="meta">Front + back laminate artwork · seal zones marked · 3 mm bleed</div>
+          </div>
+        </div>
+        <div className="dieline-legend-wrap">
+          <DielineLegend showDieline={tw.dielineOn} onToggle={() => {
+            window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { dielineOn: !tw.dielineOn } }, '*');
+          }} />
+        </div>
+        <div className="scroll-x">
+          <div className="panel-stage" style={{ padding: 40 }}>
+            <PackFlat showDieline={tw.dielineOn} showSafe={tw.safeOn} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BoxTab({ tw }) {
+  return (
+    <div>
+      <div className="section">
+        <div className="section-header">
+          <div>
+            <h2>Display box — individual panels</h2>
+            <div className="meta">240 × 140 × 90 mm · 12-unit retail case · perforated tear lid</div>
+          </div>
+        </div>
+        <div className="scroll-x">
+          <div className="row">
+            <div className="col">
+              <div className="caption">Front — shelf billboard</div>
+              <div className="panel-stage"><BoxFront showSafe={tw.safeOn} /></div>
+            </div>
+            <div className="col">
+              <div className="caption">Back — bilingual information</div>
+              <div className="panel-stage"><BoxBack showSafe={tw.safeOn} /></div>
+            </div>
+          </div>
+        </div>
+        <div className="scroll-x">
+          <div className="row">
+            <div className="col">
+              <div className="caption">Side (×2) — saturated accent</div>
+              <div className="panel-stage"><BoxSideShort showSafe={tw.safeOn} /></div>
+            </div>
+            <div className="col">
+              <div className="caption">Top — tear-away lid</div>
+              <div className="panel-stage"><BoxTop showSafe={tw.safeOn} /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-header">
+          <div>
+            <h2>Flat dieline — print-ready</h2>
+            <div className="meta">Single flat · matches supplied 240×140×90 dieline</div>
+          </div>
+        </div>
+        <div className="dieline-legend-wrap">
+          <DielineLegend showDieline={tw.dielineOn} onToggle={() => {
+            window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { dielineOn: !tw.dielineOn } }, '*');
+          }} />
+        </div>
+        <div className="scroll-x">
+          <div className="panel-stage" style={{ padding: 24 }}>
+            <BoxFlat showDieline={tw.dielineOn} showSafe={tw.safeOn} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MockupTab() {
+  return (
+    <div>
+      <div className="section">
+        <div className="section-header">
+          <div>
+            <h2>Folded mockups</h2>
+            <div className="meta">Presentation renders · CSS 3D</div>
+          </div>
+        </div>
+
+        <div className="dark-stage">
+          <div className="scenebox">
+            <BoxMockup />
+          </div>
+        </div>
+
+        <div style={{ height: 32 }} />
+
+        <div className="dark-stage">
+          <div className="scenebox">
+            <div style={{ display:'flex', gap: 80, alignItems:'flex-end', flexWrap:'wrap', justifyContent:'center' }}>
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 16 }}>
+                <PackMockup scale={1.2} />
+                <div style={{ fontFamily:'JetBrains Mono', fontSize:10, letterSpacing:'0.2em', color:'#9FC6CB', textTransform:'uppercase' }}>Sealed · retail</div>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 16 }}>
+                <PackMockup scale={1.5} />
+                <div style={{ fontFamily:'JetBrains Mono', fontSize:10, letterSpacing:'0.2em', color:'#9FC6CB', textTransform:'uppercase' }}>Hero · sealed</div>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: 16 }}>
+                <PackOpenedMockup scale={1.2} />
+                <div style={{ fontFamily:'JetBrains Mono', fontSize:10, letterSpacing:'0.2em', color:'#9FC6CB', textTransform:'uppercase' }}>Opened · in-use</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
