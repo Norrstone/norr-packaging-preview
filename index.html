@@ -450,11 +450,11 @@ function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
   const leftDigits = digits.slice(1,7).join('');
   const rightDigits = digits.slice(7,13).join('');
 
-  // Allocate height between bars (75%) and digit row (25%) so digits are
-  // clearly readable at any rendered size.
-  const barsH = height * 0.75;
-  const digitH = height * 0.25;
-  const digitFontPx = digitH * 0.78;
+  // 70/30 split — digit row is now generously tall so digits remain
+  // readable even at small render scales (down to ~20 mm rendered height).
+  const barsH = height * 0.70;
+  const digitH = height * 0.30;
+  const digitFontPx = digitH * 0.82;
   const leadingW = (BARS_X / 100) * width;
   const halfW = ((100 - BARS_X * 2) / 2 / 100) * width;
 
@@ -463,7 +463,7 @@ function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
       display: 'inline-block',
       background: '#fff',
       lineHeight: 1,
-      fontFamily: F_MONO, fontWeight: 600, color: norr.ink,
+      fontFamily: F_MONO, fontWeight: 700, color: norr.ink,
     }}>
       <svg width={width} height={barsH} viewBox={`0 0 100 ${VIEWBOX_H}`} preserveAspectRatio="none"
         style={{ display:'block', background:'#fff' }}>
@@ -728,7 +728,7 @@ function PackBack({ showSafe, showDieline }) {
           </div>
           <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, fontWeight: 500,
             letterSpacing:'0.28em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>
-            N°01 · ARCTIC&nbsp;MINT
+            ARCTIC&nbsp;MINT
           </span>
         </div>
         <Hairline color={norr.ice} style={{ marginTop: mm(0.7), opacity: 0.4, flexShrink:0 }} />
@@ -862,12 +862,12 @@ function PackBack({ showSafe, showDieline }) {
           </div>
         </div>
 
-        {/* ─── 7. PRACTICAL — Use · Storage · Recycle (FIC Art. 9(1)(g),(j); PPWR ready) ─── */}
+        {/* ─── 7. PRACTICAL — Use · Storage (recycle deferred until PPWR 2028 harmonized symbol) ─── */}
         <div style={{ marginTop: mm(1.4), flexShrink:0,
           paddingTop: mm(0.8), paddingBottom: mm(0.8),
           borderTop: `0.5px solid ${norr.ice}`,
           borderBottom: `0.5px solid ${norr.ice}`,
-          display:'grid', gridTemplateColumns:'1fr 1fr 1.15fr', columnGap: mm(2),
+          display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(3),
           alignItems:'center',
           color: norr.ice,
         }}>
@@ -881,39 +881,13 @@ function PackBack({ showSafe, showDieline }) {
             Hámark <b style={{ fontWeight: 700 }}>4 stk.</b>/dag · Max <b style={{ fontWeight: 700 }}>4</b>/day
           </div>
           {/* STORAGE */}
-          <div style={{ fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 500, lineHeight: 1.25 }}>
+          <div style={{ fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 500, lineHeight: 1.25, textAlign:'right' }}>
             <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 700,
               letterSpacing:'0.22em', textTransform:'uppercase', opacity: 0.7,
               marginRight: mm(0.6) }}>
               Storage
             </span>
             Köldu og þurru · Cool &amp; dry
-          </div>
-          {/* RECYCLE — clean Möbius triangle + resin code 7 (laminate film) */}
-          <div style={{ display:'flex', alignItems:'center', gap: mm(0.8),
-            fontFamily: F_DISP, fontSize: T.bodyAlt, fontWeight: 500, lineHeight: 1.25 }}>
-            <svg width={mm(5)} height={mm(5)} viewBox="0 0 32 32" style={{ flexShrink: 0 }}>
-              {/* Three rotational copies of one chevron arc form the Möbius loop */}
-              <g fill="none" stroke={norr.ice} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
-                <g transform="rotate(120 16 16)">
-                  <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
-                </g>
-                <g transform="rotate(240 16 16)">
-                  <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
-                </g>
-              </g>
-              <text x="16" y="19" textAnchor="middle" fontFamily={F_MONO} fontWeight="700"
-                fontSize="8" fill={norr.ice}>7</text>
-            </svg>
-            <span>
-              <span style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 700,
-                letterSpacing:'0.22em', textTransform:'uppercase', opacity: 0.7,
-                marginRight: mm(0.5) }}>
-                Recycle
-              </span>
-              Plast · Plastic film
-            </span>
           </div>
         </div>
 
@@ -953,34 +927,27 @@ function PackBack({ showSafe, showDieline }) {
         <div style={{ marginTop: mm(1.2), flexShrink:0,
           display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap: mm(1.5),
         }}>
-          {/* Best-before stamp pad — left blank for manufacturer ink stamp */}
+          {/* Best-before stamp pad — large, high-contrast border, left blank for manufacturer ink stamp */}
           <div style={{
             background:'#fff', color: norr.ink,
-            width: mm(22), height: mm(8),
-            border: `0.4px solid ${norr.ink}`,
+            width: mm(28), height: mm(11),
+            border: `0.8px solid ${norr.ink}`,
             display:'flex', flexDirection:'column',
             fontFamily: F_MONO, overflow:'hidden', flexShrink:0,
           }}>
             <div style={{
-              padding: `${mm(0.4)} ${mm(0.8)} ${mm(0.25)}`,
-              fontSize: 1.4 * MM, fontWeight: 600, letterSpacing: '0.2em', lineHeight: 1,
-              color: norr.ink, opacity: 0.85, textTransform:'uppercase',
-              borderBottom: `0.3px solid ${norr.ink}`,
+              padding: `${mm(0.5)} ${mm(1)} ${mm(0.3)}`,
+              fontSize: 1.7 * MM, fontWeight: 700, letterSpacing: '0.22em', lineHeight: 1,
+              color: norr.ink, textTransform:'uppercase',
+              borderBottom: `0.5px solid ${norr.ink}`,
             }}>
               Best&nbsp;before · Lot
             </div>
             <div style={{ flex: 1 }} />
           </div>
 
-          <div style={{ flex: 1, textAlign:'center', paddingBottom: mm(0.4) }}>
-            <div style={{ fontFamily: F_MONO, fontSize: 1.7 * MM, fontWeight: 500,
-              letterSpacing:'0.25em', textTransform:'uppercase', color: norr.ice }}>
-              norrgum.com
-            </div>
-          </div>
-
-          <div style={{ background:'#fff', padding: `${mm(0.6)} ${mm(0.8)}`, flexShrink:0 }}>
-            <Barcode width={32 * MM} height={19 * MM} code="5694080022721" />
+          <div style={{ background:'#fff', padding: `${mm(0.7)} ${mm(1)}`, flexShrink:0 }}>
+            <Barcode width={34 * MM} height={20 * MM} code="5694080022721" />
           </div>
         </div>
       </div>
@@ -1051,7 +1018,7 @@ function BoxFront({ showSafe }) {
       }}>
         <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>ICELAND · EST. MMXXV</MonoLabel>
         <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>NORDIC ENERGY</MonoLabel>
-        <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>N°01 · ARCTIC MINT</MonoLabel>
+        <MonoLabel size={6} tracking="0.35em" color={norr.mintLt}>ARCTIC MINT</MonoLabel>
       </div>
 
       {/* HERO — centered wordmark stack, sized to fit between top bar and bottom band */}
@@ -1155,7 +1122,7 @@ function BoxBack({ showSafe }) {
           <Wordmark size={6 * MM} color={norr.mint} />
         </div>
         <MonoLabel size={6.5} tracking="0.3em" color={norr.mint}>
-          DISPLAY CASE · 12 UNITS · N°01 ARCTIC MINT
+          DISPLAY CASE · 12 UNITS · ARCTIC MINT
         </MonoLabel>
       </div>
       <Hairline color={norr.mint} style={{ marginTop: mm(1.4), flexShrink:0 }} />
@@ -1259,9 +1226,9 @@ function BoxBack({ showSafe }) {
         </div>
       </div>
 
-      {/* ─── 6. PRACTICAL — Use · Storage · Recycle ─── */}
+      {/* ─── 6. PRACTICAL — Use · Storage (recycle deferred until PPWR 2028 harmonized symbol) ─── */}
       <div style={{ marginTop: mm(2), flexShrink:0,
-        display:'grid', gridTemplateColumns:'1fr 1fr 1.1fr', columnGap: mm(4),
+        display:'grid', gridTemplateColumns:'1fr 1fr', columnGap: mm(6),
         alignItems:'center', color: norr.ink,
       }}>
         <div style={{ fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3 }}>
@@ -1270,33 +1237,11 @@ function BoxBack({ showSafe }) {
             marginRight: mm(0.8) }}>Use</span>
           Hámark <b style={{ fontWeight: 700 }}>4 stk.</b>/dag · Max <b style={{ fontWeight: 700 }}>4</b>/day
         </div>
-        <div style={{ fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3 }}>
+        <div style={{ fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3, textAlign:'right' }}>
           <span style={{ fontFamily: F_MONO, fontSize: 1.8 * MM, fontWeight: 700,
             letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint,
             marginRight: mm(0.8) }}>Storage</span>
           Köldu og þurru · Cool &amp; dry
-        </div>
-        <div style={{ display:'flex', alignItems:'center', gap: mm(1),
-          fontFamily: F_DISP, fontSize: 2.4 * MM, fontWeight: 500, lineHeight: 1.3 }}>
-          <svg width={mm(7)} height={mm(7)} viewBox="0 0 32 32" style={{ flexShrink: 0 }}>
-            <g fill="none" stroke={norr.mint} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
-              <g transform="rotate(120 16 16)">
-                <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
-              </g>
-              <g transform="rotate(240 16 16)">
-                <path d="M 9 22.5 L 6 18 L 12 14 M 6 18 L 12 18.4" />
-              </g>
-            </g>
-            <text x="16" y="19.5" textAnchor="middle" fontFamily={F_MONO} fontWeight="700"
-              fontSize="9" fill={norr.mint}>21</text>
-          </svg>
-          <span>
-            <span style={{ fontFamily: F_MONO, fontSize: 1.8 * MM, fontWeight: 700,
-              letterSpacing:'0.22em', textTransform:'uppercase', color: norr.mint,
-              marginRight: mm(0.6) }}>Recycle</span>
-            Pappi · Cardboard
-          </span>
         </div>
       </div>
 
@@ -1384,9 +1329,8 @@ function BoxSideShort({ showSafe }) {
             <MountainBolt size={(16 * MM)} color={norr.ice} accent={norr.ice} />
           </div>
           <div style={{ marginTop: mm(3.5) }}>
-            <MonoLabel size={4.5} tracking="0.32em" color={norr.mintLt}>N°01</MonoLabel>
             <div style={{ fontFamily: F_DISP, fontWeight: 700, fontSize: (5 * MM),
-              letterSpacing: '0.18em', marginTop: mm(1.2), lineHeight: 1, color: norr.ice }}>
+              letterSpacing: '0.18em', lineHeight: 1, color: norr.ice }}>
               ARCTIC&nbsp;MINT
             </div>
             <div style={{ fontFamily: F_DISP, fontWeight: 400, fontStyle:'italic',
@@ -1467,7 +1411,7 @@ function BoxTop({ showSafe }) {
       }}>
         <div>
           <MonoLabel size={4.5} tracking="0.32em" color={norr.mintLt}>
-            N°01 · ARCTIC MINT
+            ARCTIC MINT
           </MonoLabel>
           <div style={{ marginTop: mm(2), display:'flex', alignItems:'center', gap: mm(3) }}>
             <MountainBolt size={(11 * MM)} color={norr.ice} accent={norr.ice} />
