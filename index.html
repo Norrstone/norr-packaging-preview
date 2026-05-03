@@ -450,11 +450,13 @@ function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
   const leftDigits = digits.slice(1,7).join('');
   const rightDigits = digits.slice(7,13).join('');
 
-  // 70/30 split — digit row is generously tall so digits remain
-  // readable even at small render scales.
-  const barsH = height * 0.70;
-  const digitH = height * 0.30;
-  const digitFontPx = digitH * 0.82;
+  // 75/25 split — digit row tall enough for legibility but not greedy.
+  // Font size is constrained by BOTH the digit row height AND the barcode
+  // width — at the chosen letter-spacing, 13 digits + group gaps fit when
+  // fontSize ≤ width × 0.085. Pick whichever constraint is tighter.
+  const barsH = height * 0.75;
+  const digitH = height * 0.25;
+  const digitFontPx = Math.min(digitH * 0.78, width * 0.085);
 
   return (
     <div style={{
@@ -467,17 +469,16 @@ function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
         style={{ display:'block', background:'#fff' }}>
         {bars}
       </svg>
-      {/* All 13 digits as a single centered line — simpler and reliable.
-          Mono font + thin space between groups gives the EAN-13 visual rhythm
-          without needing rigid grid alignment. */}
+      {/* All 13 digits as a single centered line — sized so it always fits
+          inside the bars width (no horizontal overflow). */}
       <div style={{
         width, height: digitH,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: digitFontPx,
-        letterSpacing: '0.12em',
+        letterSpacing: '0.06em',
         whiteSpace: 'nowrap',
       }}>
-        {digits[0]}&nbsp;&nbsp;{leftDigits}&nbsp;&nbsp;{rightDigits}
+        {digits[0]}&nbsp;{leftDigits}&nbsp;{rightDigits}
       </div>
     </div>
   );
