@@ -412,78 +412,76 @@ function NutritionTable({ compact = false, onBlue = false }) {
   );
 }
 
-// Real EAN-13 barcode for 5694080022721 — laid out to match supplied reference image:
-// leading "5" sits left of the bars at baseline; "694080" centered under left half;
-// "022721" centered under right half; bars descend to the digit baseline at the guards.
+// Static EAN-13 barcode for GTIN 5694080022721 (Arctic Mint pouch).
+// Uses a pre-rendered SVG from tec-it.com — bars + human-readable digits
+// are baked in as <line> + <text> elements, so rendering is identical
+// across browsers, print engines, and screenshot tools.
+// ViewBox 115 × 74 (aspect ≈ 1.55:1).
 function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
-  const L = ['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'];
-  const G = ['0100111','0110011','0011011','0100001','0011101','0111001','0000101','0010001','0001001','0010111'];
-  const R = ['1110010','1100110','1101100','1000010','1011100','1001110','1010000','1000100','1001000','1110100'];
-  const PARITY = ['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
-  const digits = code.replace(/\D/g,'').padStart(13,'0').slice(-13).split('').map(Number);
-  const parity = PARITY[digits[0]];
-  let bits = '101';
-  for (let i = 1; i <= 6; i++) bits += (parity[i-1] === 'L' ? L : G)[digits[i]];
-  bits += '01010';
-  for (let i = 7; i <= 12; i++) bits += R[digits[i]];
-  bits += '101';
-
-  // Bars rendered in SVG, digit row rendered in HTML beneath.
-  // viewBox has zero trailing whitespace below bars — guards reach the bottom
-  // of the SVG so the digit row sits flush against the bars.
-  const BARS_X = 5;
-  const BARS_TOP = 0;
-  const BARS_BTM = 56;
-  const GUARD_BTM = 60;
-  const VIEWBOX_H = 60;        // matches GUARD_BTM exactly — no padding below bars
-  const guardCols = new Set([0,1,2,45,46,47,48,49,92,93,94]);
-
-  const bars = [];
-  for (let i = 0; i < bits.length; i++) {
-    if (bits[i] === '1') {
-      const x = BARS_X + i;
-      const y2 = guardCols.has(i) ? GUARD_BTM : BARS_BTM;
-      bars.push(<rect key={i} x={x} y={BARS_TOP} width="1.05" height={y2 - BARS_TOP} fill={norr.ink} />);
-    }
-  }
-
-  const leftDigits = digits.slice(1,7).join('');
-  const rightDigits = digits.slice(7,13).join('');
-
-  // 70/30 split — generous digit row with headroom above and below the text
-  // so digits never get clipped at any rendered size or browser.
-  // Font size is constrained by BOTH the digit row height AND the barcode
-  // width — at the chosen letter-spacing, 13 digits + group gaps fit when
-  // fontSize ≤ width × 0.085. Pick whichever constraint is tighter.
-  const barsH = height * 0.70;
-  const digitH = height * 0.30;
-  const digitFontPx = Math.min(digitH * 0.55, width * 0.085);
-
   return (
-    <div style={{
-      display: 'inline-block',
-      background: '#fff',
-      lineHeight: 1,
-      fontFamily: F_MONO, fontWeight: 700, color: norr.ink,
-    }}>
-      <svg width={width} height={barsH} viewBox={`0 0 100 ${VIEWBOX_H}`} preserveAspectRatio="none"
-        style={{ display:'block', background:'#fff' }}>
-        {bars}
-      </svg>
-      {/* All 13 digits as a single centered line — sized so it always fits
-          inside the bars width (no horizontal overflow). Vertically centered
-          inside a generously tall row so descenders never hit the wrapper edge. */}
-      <div style={{
-        width, height: digitH,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: digitFontPx,
-        letterSpacing: '0.06em',
-        whiteSpace: 'nowrap',
-        lineHeight: 1,
-      }}>
-        {digits[0]}&nbsp;{leftDigits}&nbsp;{rightDigits}
-      </div>
-    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 74"
+      width={width} height={height}
+      preserveAspectRatio="xMidYMid meet"
+      fill="#FFFFFF" stroke="#000000" strokeWidth="1" strokeLinecap="butt"
+      style={{ display:'block', background:'#fff' }}>
+      <line x1="10" y1="0" x2="10" y2="74" />
+      <line x1="12" y1="0" x2="12" y2="74" />
+      <line x1="14" y1="0" x2="14" y2="67" />
+      <line x1="16" y1="0" x2="16" y2="67" />
+      <line strokeWidth="1.5" x1="16.75" y1="0" x2="16.75" y2="67" />
+      <line strokeWidth="1.5" x1="17.75" y1="0" x2="17.75" y2="67" />
+      <line strokeWidth="1.5" x1="18.75" y1="0" x2="18.75" y2="67" />
+      <line x1="22" y1="0" x2="22" y2="67" />
+      <line x1="24" y1="0" x2="24" y2="67" />
+      <line strokeWidth="1.5" x1="24.75" y1="0" x2="24.75" y2="67" />
+      <line strokeWidth="1.5" x1="25.75" y1="0" x2="25.75" y2="67" />
+      <line x1="29" y1="0" x2="29" y2="67" />
+      <line strokeWidth="1.5" x1="29.75" y1="0" x2="29.75" y2="67" />
+      <line strokeWidth="1.5" x1="30.75" y1="0" x2="30.75" y2="67" />
+      <line x1="33" y1="0" x2="33" y2="67" />
+      <line x1="37" y1="0" x2="37" y2="67" />
+      <line strokeWidth="1.5" x1="37.75" y1="0" x2="37.75" y2="67" />
+      <line x1="40" y1="0" x2="40" y2="67" />
+      <line x1="42" y1="0" x2="42" y2="67" />
+      <line strokeWidth="1.5" x1="42.75" y1="0" x2="42.75" y2="67" />
+      <line x1="45" y1="0" x2="45" y2="67" />
+      <line strokeWidth="1.5" x1="45.75" y1="0" x2="45.75" y2="67" />
+      <line strokeWidth="1.5" x1="46.75" y1="0" x2="46.75" y2="67" />
+      <line x1="49" y1="0" x2="49" y2="67" />
+      <line x1="52" y1="0" x2="52" y2="67" />
+      <line strokeWidth="1.5" x1="52.75" y1="0" x2="52.75" y2="67" />
+      <line strokeWidth="1.5" x1="53.75" y1="0" x2="53.75" y2="67" />
+      <line x1="56" y1="0" x2="56" y2="74" />
+      <line x1="58" y1="0" x2="58" y2="74" />
+      <line x1="60" y1="0" x2="60" y2="67" />
+      <line strokeWidth="1.5" x1="60.75" y1="0" x2="60.75" y2="67" />
+      <line strokeWidth="1.5" x1="61.75" y1="0" x2="61.75" y2="67" />
+      <line x1="65" y1="0" x2="65" y2="67" />
+      <line x1="67" y1="0" x2="67" y2="67" />
+      <line strokeWidth="1.5" x1="67.75" y1="0" x2="67.75" y2="67" />
+      <line x1="70" y1="0" x2="70" y2="67" />
+      <line strokeWidth="1.5" x1="70.75" y1="0" x2="70.75" y2="67" />
+      <line x1="74" y1="0" x2="74" y2="67" />
+      <line strokeWidth="1.5" x1="74.75" y1="0" x2="74.75" y2="67" />
+      <line x1="77" y1="0" x2="77" y2="67" />
+      <line strokeWidth="1.5" x1="77.75" y1="0" x2="77.75" y2="67" />
+      <line x1="81" y1="0" x2="81" y2="67" />
+      <line x1="85" y1="0" x2="85" y2="67" />
+      <line x1="88" y1="0" x2="88" y2="67" />
+      <line strokeWidth="1.5" x1="88.75" y1="0" x2="88.75" y2="67" />
+      <line x1="91" y1="0" x2="91" y2="67" />
+      <line strokeWidth="1.5" x1="91.75" y1="0" x2="91.75" y2="67" />
+      <line x1="95" y1="0" x2="95" y2="67" />
+      <line strokeWidth="1.5" x1="95.75" y1="0" x2="95.75" y2="67" />
+      <line x1="99" y1="0" x2="99" y2="67" />
+      <line strokeWidth="1.5" x1="99.75" y1="0" x2="99.75" y2="67" />
+      <line x1="102" y1="0" x2="102" y2="74" />
+      <line x1="104" y1="0" x2="104" y2="74" />
+      <text fontFamily="arial" x="4" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">5</text>
+      <text fontFamily="arial" x="21" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">694080</text>
+      <text fontFamily="arial" x="67" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">022721</text>
+      <text fontFamily="arial" x="106" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">{'>'}</text>
+    </svg>
   );
 }
 
@@ -947,8 +945,8 @@ function PackBack({ showSafe, showDieline }) {
             <div style={{ flex: 1 }} />
           </div>
 
-          <div style={{ background:'#fff', padding: `${mm(1)} ${mm(1)} ${mm(1.6)}`, flexShrink:0 }}>
-            <Barcode width={34 * MM} height={20 * MM} code="5694080022721" />
+          <div style={{ background:'#fff', padding: `${mm(1)} ${mm(1.5)}`, flexShrink:0 }}>
+            <Barcode width={32 * MM} height={20.6 * MM} code="5694080022721" />
           </div>
         </div>
       </div>
