@@ -419,11 +419,11 @@ function NutritionTable({ compact = false, onBlue = false }) {
 // ViewBox 115 × 74 (aspect ≈ 1.55:1).
 function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 74"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 80"
       width={width} height={height}
       preserveAspectRatio="xMidYMid meet"
       fill="#FFFFFF" stroke="#000000" strokeWidth="1" strokeLinecap="butt"
-      style={{ display:'block', background:'#fff' }}>
+      style={{ display:'block', background:'#fff', overflow:'visible' }}>
       <line x1="10" y1="0" x2="10" y2="74" />
       <line x1="12" y1="0" x2="12" y2="74" />
       <line x1="14" y1="0" x2="14" y2="67" />
@@ -946,7 +946,7 @@ function PackBack({ showSafe, showDieline }) {
           </div>
 
           <div style={{ background:'#fff', padding: `${mm(1)} ${mm(1.5)}`, flexShrink:0 }}>
-            <Barcode width={32 * MM} height={20.6 * MM} code="5694080022721" />
+            <Barcode width={32 * MM} height={22.3 * MM} code="5694080022721" />
           </div>
         </div>
       </div>
