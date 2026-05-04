@@ -413,75 +413,21 @@ function NutritionTable({ compact = false, onBlue = false }) {
 }
 
 // Static EAN-13 barcode for GTIN 5694080022721 (Arctic Mint pouch).
-// Uses a pre-rendered SVG from tec-it.com — bars + human-readable digits
-// are baked in as <line> + <text> elements, so rendering is identical
-// across browsers, print engines, and screenshot tools.
-// ViewBox 115 × 74 (aspect ≈ 1.55:1).
+// Pre-rendered SVG from tec-it.com, embedded as a base64 data URL inside an
+// <img> tag — the browser renders the SVG natively without React/JSX
+// reinterpreting any attributes. Identical rendering on every browser,
+// at every zoom, in every print engine.
+const BARCODE_DATA_URL_5694080022721 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTUgODAiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCI+CiAgPGxpbmUgeDI9IjEwIiB4MT0iMTAiIHkxPSIwIiB5Mj0iNzQiIC8+CiAgPGxpbmUgeDI9IjEyIiB4MT0iMTIiIHkxPSIwIiB5Mj0iNzQiIC8+CiAgPGxpbmUgeDI9IjE0IiB4MT0iMTQiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9IjE2IiB4MT0iMTYiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSIxNi43NSIgeDE9IjE2Ljc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iMTcuNzUiIHgxPSIxNy43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9IjE4Ljc1IiB4MT0iMTguNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9IjIyIiB4MT0iMjIiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9IjI0IiB4MT0iMjQiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSIyNC43NSIgeDE9IjI0Ljc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iMjUuNzUiIHgxPSIyNS43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iMjkiIHgxPSIyOSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9IjI5Ljc1IiB4MT0iMjkuNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSIzMC43NSIgeDE9IjMwLjc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSIzMyIgeDE9IjMzIiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSIzNyIgeDE9IjM3IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iMzcuNzUiIHgxPSIzNy43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iNDAiIHgxPSI0MCIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iNDIiIHgxPSI0MiIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9IjQyLjc1IiB4MT0iNDIuNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9IjQ1IiB4MT0iNDUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSI0NS43NSIgeDE9IjQ1Ljc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iNDYuNzUiIHgxPSI0Ni43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iNDkiIHgxPSI0OSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iNTIiIHgxPSI1MiIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9IjUyLjc1IiB4MT0iNTIuNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSI1My43NSIgeDE9IjUzLjc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSI1NiIgeDE9IjU2IiB5MT0iMCIgeTI9Ijc0IiAvPgogIDxsaW5lIHgyPSI1OCIgeDE9IjU4IiB5MT0iMCIgeTI9Ijc0IiAvPgogIDxsaW5lIHgyPSI2MCIgeDE9IjYwIiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iNjAuNzUiIHgxPSI2MC43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9IjYxLjc1IiB4MT0iNjEuNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9IjY1IiB4MT0iNjUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9IjY3IiB4MT0iNjciIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSI2Ny43NSIgeDE9IjY3Ljc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSI3MCIgeDE9IjcwIiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iNzAuNzUiIHgxPSI3MC43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iNzQiIHgxPSI3NCIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9Ijc0Ljc1IiB4MT0iNzQuNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9Ijc3IiB4MT0iNzciIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSI3Ny43NSIgeDE9Ijc3Ljc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSI4MSIgeDE9IjgxIiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSI4NSIgeDE9Ijg1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSI4OCIgeDE9Ijg4IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iODguNzUiIHgxPSI4OC43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iOTEiIHgxPSI5MSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSBzdHJva2Utd2lkdGg9IjEuNSIgeDI9IjkxLjc1IiB4MT0iOTEuNzUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgeDI9Ijk1IiB4MT0iOTUiIHkxPSIwIiB5Mj0iNjciIC8+CiAgPGxpbmUgc3Ryb2tlLXdpZHRoPSIxLjUiIHgyPSI5NS43NSIgeDE9Ijk1Ljc1IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHgyPSI5OSIgeDE9Ijk5IiB5MT0iMCIgeTI9IjY3IiAvPgogIDxsaW5lIHN0cm9rZS13aWR0aD0iMS41IiB4Mj0iOTkuNzUiIHgxPSI5OS43NSIgeTE9IjAiIHkyPSI2NyIgLz4KICA8bGluZSB4Mj0iMTAyIiB4MT0iMTAyIiB5MT0iMCIgeTI9Ijc0IiAvPgogIDxsaW5lIHgyPSIxMDQiIHgxPSIxMDQiIHkxPSIwIiB5Mj0iNzQiIC8+CiAgPHRleHQgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCIgeD0iNCIgeT0iNzMuNSIgc3Ryb2tlLXdpZHRoPSIwIiBmaWxsPSIjMDAwMDAwIiBmb250LXNpemU9IjgiPjU8L3RleHQ+CiAgPHRleHQgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCIgeD0iMjEiIHk9IjczLjUiIHN0cm9rZS13aWR0aD0iMCIgZmlsbD0iIzAwMDAwMCIgZm9udC1zaXplPSI4Ij42OTQwODA8L3RleHQ+CiAgPHRleHQgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCIgeD0iNjciIHk9IjczLjUiIHN0cm9rZS13aWR0aD0iMCIgZmlsbD0iIzAwMDAwMCIgZm9udC1zaXplPSI4Ij4wMjI3MjE8L3RleHQ+CiAgPHRleHQgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCIgeD0iMTA2IiB5PSI3My41IiBzdHJva2Utd2lkdGg9IjAiIGZpbGw9IiMwMDAwMDAiIGZvbnQtc2l6ZT0iOCI+Jmd0OzwvdGV4dD4KPC9zdmc+Cg==';
+
 function Barcode({ width = 100, height = 67, code = '5694080022721' }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 80"
-      width={width} height={height}
-      preserveAspectRatio="xMidYMid meet"
-      fill="#FFFFFF" stroke="#000000" strokeWidth="1" strokeLinecap="butt"
-      style={{ display:'block', background:'#fff', overflow:'visible' }}>
-      <line x1="10" y1="0" x2="10" y2="74" />
-      <line x1="12" y1="0" x2="12" y2="74" />
-      <line x1="14" y1="0" x2="14" y2="67" />
-      <line x1="16" y1="0" x2="16" y2="67" />
-      <line strokeWidth="1.5" x1="16.75" y1="0" x2="16.75" y2="67" />
-      <line strokeWidth="1.5" x1="17.75" y1="0" x2="17.75" y2="67" />
-      <line strokeWidth="1.5" x1="18.75" y1="0" x2="18.75" y2="67" />
-      <line x1="22" y1="0" x2="22" y2="67" />
-      <line x1="24" y1="0" x2="24" y2="67" />
-      <line strokeWidth="1.5" x1="24.75" y1="0" x2="24.75" y2="67" />
-      <line strokeWidth="1.5" x1="25.75" y1="0" x2="25.75" y2="67" />
-      <line x1="29" y1="0" x2="29" y2="67" />
-      <line strokeWidth="1.5" x1="29.75" y1="0" x2="29.75" y2="67" />
-      <line strokeWidth="1.5" x1="30.75" y1="0" x2="30.75" y2="67" />
-      <line x1="33" y1="0" x2="33" y2="67" />
-      <line x1="37" y1="0" x2="37" y2="67" />
-      <line strokeWidth="1.5" x1="37.75" y1="0" x2="37.75" y2="67" />
-      <line x1="40" y1="0" x2="40" y2="67" />
-      <line x1="42" y1="0" x2="42" y2="67" />
-      <line strokeWidth="1.5" x1="42.75" y1="0" x2="42.75" y2="67" />
-      <line x1="45" y1="0" x2="45" y2="67" />
-      <line strokeWidth="1.5" x1="45.75" y1="0" x2="45.75" y2="67" />
-      <line strokeWidth="1.5" x1="46.75" y1="0" x2="46.75" y2="67" />
-      <line x1="49" y1="0" x2="49" y2="67" />
-      <line x1="52" y1="0" x2="52" y2="67" />
-      <line strokeWidth="1.5" x1="52.75" y1="0" x2="52.75" y2="67" />
-      <line strokeWidth="1.5" x1="53.75" y1="0" x2="53.75" y2="67" />
-      <line x1="56" y1="0" x2="56" y2="74" />
-      <line x1="58" y1="0" x2="58" y2="74" />
-      <line x1="60" y1="0" x2="60" y2="67" />
-      <line strokeWidth="1.5" x1="60.75" y1="0" x2="60.75" y2="67" />
-      <line strokeWidth="1.5" x1="61.75" y1="0" x2="61.75" y2="67" />
-      <line x1="65" y1="0" x2="65" y2="67" />
-      <line x1="67" y1="0" x2="67" y2="67" />
-      <line strokeWidth="1.5" x1="67.75" y1="0" x2="67.75" y2="67" />
-      <line x1="70" y1="0" x2="70" y2="67" />
-      <line strokeWidth="1.5" x1="70.75" y1="0" x2="70.75" y2="67" />
-      <line x1="74" y1="0" x2="74" y2="67" />
-      <line strokeWidth="1.5" x1="74.75" y1="0" x2="74.75" y2="67" />
-      <line x1="77" y1="0" x2="77" y2="67" />
-      <line strokeWidth="1.5" x1="77.75" y1="0" x2="77.75" y2="67" />
-      <line x1="81" y1="0" x2="81" y2="67" />
-      <line x1="85" y1="0" x2="85" y2="67" />
-      <line x1="88" y1="0" x2="88" y2="67" />
-      <line strokeWidth="1.5" x1="88.75" y1="0" x2="88.75" y2="67" />
-      <line x1="91" y1="0" x2="91" y2="67" />
-      <line strokeWidth="1.5" x1="91.75" y1="0" x2="91.75" y2="67" />
-      <line x1="95" y1="0" x2="95" y2="67" />
-      <line strokeWidth="1.5" x1="95.75" y1="0" x2="95.75" y2="67" />
-      <line x1="99" y1="0" x2="99" y2="67" />
-      <line strokeWidth="1.5" x1="99.75" y1="0" x2="99.75" y2="67" />
-      <line x1="102" y1="0" x2="102" y2="74" />
-      <line x1="104" y1="0" x2="104" y2="74" />
-      <text fontFamily="arial" x="4" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">5</text>
-      <text fontFamily="arial" x="21" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">694080</text>
-      <text fontFamily="arial" x="67" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">022721</text>
-      <text fontFamily="arial" x="106" y="73.5" strokeWidth="0" fill="#000000" fontSize="8">{'>'}</text>
-    </svg>
+    <img
+      src={BARCODE_DATA_URL_5694080022721}
+      alt={`EAN-13 ${code}`}
+      width={width}
+      height={height}
+      style={{ display: 'block', background: '#fff', objectFit: 'contain' }}
+    />
   );
 }
 
