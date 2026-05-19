@@ -602,7 +602,7 @@ function PackFront({ showSafe, showDieline }) {
 // → nutrition (Annex XV) → suggested use & storage → admin chrome.
 // All mandatory text sized for x-height ≥ 1.2 mm (Reg. 1169/2011 Annex IV).
 // ─────────────────────────────────────────────────────────
-function PackBack({ showSafe, showDieline, eNumbers = false }) {
+function PackBack({ showSafe, showDieline }) {
   const W = PACK.w, H = PACK.h;
   const topSeal = POUCH.topSeal, btmSeal = POUCH.btmSeal, sideSeal = POUCH.sideSeal;
   const PAD = 5; // mm — content padding inside the side seals
@@ -764,19 +764,11 @@ function PackBack({ showSafe, showDieline, eNumbers = false }) {
           }}>
             <div lang="is" style={{ fontFamily: F_DISP, fontSize: T.body, fontWeight: 400,
               lineHeight: 1.32, color: norr.ice }}>
-              {eNumbers ? (<>
-                Sætuefni (E967, E960), tyggjógrunnur, bragðefni, bindiefni (E414), ýruefni (E322), rakagefandi efni (E422), fylliefni (E170), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b>, yfirborðsefni (E903). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
-              </>) : (<>
-                Sætuefni (xýlítól, stevíólglýkósíðar), tyggjógrunnur, bragðefni, bindiefni (arabískt gúmmí), ýruefni (sólblómalesitín), rakagefandi efni (glýseról), fylliefni (kalsíumkarbónat), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b> (sýanókóbalamín), yfirborðsefni (karnúbavax). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
-              </>)}
+              Sætuefni (E967, E960), tyggjógrunnur, bragðefni, bindiefni (E414), ýruefni (E322), rakagefandi efni (E422), fylliefni (E170), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b>, yfirborðsefni (E903). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
             </div>
             <div lang="en" style={{ fontFamily: F_DISP, fontSize: T.body, fontWeight: 400,
               lineHeight: 1.32, color: norr.ice }}>
-              {eNumbers ? (<>
-                Sweeteners (E967, E960), gum base, flavourings, stabiliser (E414), emulsifier (E322), humectant (E422), bulking agent (E170), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b>, glazing agent (E903). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
-              </>) : (<>
-                Sweeteners (xylitol, steviol glycosides), gum base, flavourings, stabiliser (gum arabic), emulsifier (sunflower lecithin), humectant (glycerol), bulking agent (calcium carbonate), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b> (cyanocobalamin), glazing agent (carnauba wax). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
-              </>)}
+              Sweeteners (E967, E960), gum base, flavourings, stabiliser (E414), emulsifier (E322), humectant (E422), bulking agent (E170), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b>, glazing agent (E903). <i style={{ fontStyle:'italic', opacity: 0.9 }}>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
             </div>
           </div>
         </div>
@@ -1150,11 +1142,11 @@ function BoxBack({ showSafe }) {
         }}>
           <div lang="is" style={{ fontFamily: F_DISP, fontSize: 2.6 * MM,
             lineHeight: 1.4, color: norr.ink, fontWeight: 400 }}>
-            Sætuefni (xýlítól, stevíólglýkósíðar), tyggjógrunnur, bragðefni, bindiefni (arabískt gúmmí), ýruefni (sólblómalesitín), rakagefandi efni (glýseról), fylliefni (kalsíumkarbónat), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b> (sýanókóbalamín), yfirborðsefni (karnúbavax). <i>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
+            Sætuefni (E967, E960), tyggjógrunnur, bragðefni, bindiefni (E414), ýruefni (E322), rakagefandi efni (E422), fylliefni (E170), <b style={{ fontWeight: 700 }}>koffín</b>, <b style={{ fontWeight: 700 }}>B12-vítamín</b>, yfirborðsefni (E903). <i>Inniheldur sætuefni. Mikil neysla getur haft hægðalosandi áhrif.</i>
           </div>
           <div lang="en" style={{ fontFamily: F_DISP, fontSize: 2.6 * MM,
             lineHeight: 1.4, color: norr.ink, fontWeight: 400 }}>
-            Sweeteners (xylitol, steviol glycosides), gum base, flavourings, stabiliser (gum arabic), emulsifier (sunflower lecithin), humectant (glycerol), bulking agent (calcium carbonate), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b> (cyanocobalamin), glazing agent (carnauba wax). <i>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
+            Sweeteners (E967, E960), gum base, flavourings, stabiliser (E414), emulsifier (E322), humectant (E422), bulking agent (E170), <b style={{ fontWeight: 700 }}>caffeine</b>, <b style={{ fontWeight: 700 }}>vitamin B12</b>, glazing agent (E903). <i>Contains sweeteners. Excessive consumption may produce laxative effects.</i>
           </div>
         </div>
       </div>
@@ -1890,27 +1882,6 @@ function PackTab({ tw }) {
             <div className="col">
               <div className="caption">Back face (IS | EN)</div>
               <div className="panel-stage"><PackBack showSafe={tw.safeOn} /></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="section">
-        <div className="section-header">
-          <div>
-            <h2>Ingredients format — comparison</h2>
-            <div className="meta">Same compliance, different transparency. Pick the one that fits the brand.</div>
-          </div>
-        </div>
-        <div className="scroll-x">
-          <div className="row">
-            <div className="col">
-              <div className="caption">A — Named ingredients (recommended for premium positioning)</div>
-              <div className="panel-stage"><PackBack showSafe={tw.safeOn} eNumbers={false} /></div>
-            </div>
-            <div className="col">
-              <div className="caption">B — E-numbers (shorter, clinical feel)</div>
-              <div className="panel-stage"><PackBack showSafe={tw.safeOn} eNumbers={true} /></div>
             </div>
           </div>
         </div>
