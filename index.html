@@ -364,7 +364,7 @@ function StatBlock({ value, unit, label, color = norr.ink, align = 'left' }) {
 function NutritionTable({ compact = false, onBlue = false }) {
   // Per 100 g values for sugar-free chewing gum (1.8 g / piece, 50 mg caffeine / piece, 10 μg B12 / piece)
   // 50 mg × (100 / 1.8) ≈ 2778 mg → 2.78 g caffeine / 100 g
-  // 10 μg × (100 / 1.8) ≈ 556 μg B12 / 100 g  → 22 240 % NRV
+  // 10 μg × (100 / 1.8) ≈ 556 μg B12 / 100 g  → 22 240 % RDS/NRV
   const rows = [
     ['Orka / Energy', '697 kJ / 165 kcal'],
     ['Fita / Fat', '0,5 g'],
@@ -375,7 +375,7 @@ function NutritionTable({ compact = false, onBlue = false }) {
     ['Prótein / Protein', '0 g'],
     ['Salt', '0 g'],
     ['Koffín / Caffeine', '2 778 mg'],
-    ['B12-vítamín / Vitamin B12', '556 μg (22 240 % NRV)'],
+    ['B12-vítamín / Vitamin B12', '556 μg (22 240 % RDS/NRV)'],
   ];
   const fg = onBlue ? norr.ice : norr.ink;
   const muted = onBlue ? norr.mintLt : norr.muted;
@@ -494,10 +494,11 @@ function PackFront({ showSafe, showDieline }) {
         background: norr.mint,
       }} />
 
-      {/* TYPE STACK — centered */}
+      {/* TYPE STACK — centered. Top offset = 23mm to stay clear of the 21mm
+          dieline header zone (tear notch + zip-close area). */}
       <div style={{
         position:'absolute',
-        top: mm(topSeal + 7),
+        top: mm(23),
         left: mm(PAD), right: mm(PAD),
         color: norr.ice,
         textAlign: 'center',
@@ -629,16 +630,11 @@ function PackBack({ showSafe, showDieline }) {
       position: 'relative', width: mm(W), height: mm(H),
       background: norr.mint, color: norr.ice, overflow: 'hidden', boxSizing: 'border-box',
     }}>
-      {/* Header crimp seal */}
+      {/* Header crimp seal — empty brand-color block.
+          The 0–21 mm zone gets folded for the tear notch + zip-close
+          per the supplier dieline; no printed text here. */}
       <div style={{ position:'absolute', top:0, left:0, right:0, height: mm(topSeal),
-        background: norr.mint }}>
-        <div style={{ position:'absolute', top:'50%', left:0, right:0, transform:'translateY(-50%)',
-          display:'flex', justifyContent:'space-between', padding:`0 ${mm(6)}` }}>
-          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>← TEAR</span>
-          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>PRESS TO RESEAL</span>
-          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>TEAR →</span>
-        </div>
-      </div>
+        background: norr.mint }} />
       <div style={{ position:'absolute', bottom:0, left:0, right:0, height: mm(btmSeal),
         background: norr.mint }} />
 
@@ -652,10 +648,11 @@ function PackBack({ showSafe, showDieline }) {
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
 
-      {/* CONTENT AREA — overflow:hidden as safety net so nothing escapes the pouch */}
+      {/* CONTENT AREA — starts 23 mm from top (clear of the 21 mm dieline
+          header zone). overflow:hidden as a safety net so nothing escapes. */}
       <div style={{
         position:'absolute',
-        top: mm(topSeal + 2), bottom: mm(btmSeal + 0.5),
+        top: mm(23), bottom: mm(btmSeal + 0.5),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
@@ -878,23 +875,23 @@ function PackBack({ showSafe, showDieline }) {
         <div style={{ marginTop: mm(1.2), flexShrink:0,
           display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap: mm(1.5),
         }}>
-          {/* Best-before stamp pad — generous size, high-contrast border, blank for manufacturer ink stamp */}
+          {/* Best-before + Lot — pre-printed for the launch run.
+              Production values supplied by manufacturer 2026-05-21. */}
           <div style={{
             background:'#fff', color: norr.ink,
             width: mm(32), height: mm(13),
             border: `1px solid ${norr.ink}`,
-            display:'flex', flexDirection:'column',
-            fontFamily: F_MONO, overflow:'hidden', flexShrink:0,
+            display:'flex', flexDirection:'column', justifyContent:'center',
+            padding: `${mm(1)} ${mm(1.5)}`,
+            fontFamily: F_MONO, fontWeight: 700,
+            lineHeight: 1.3, color: norr.ink, flexShrink:0,
           }}>
-            <div style={{
-              padding: `${mm(0.6)} ${mm(1.2)} ${mm(0.4)}`,
-              fontSize: 1.9 * MM, fontWeight: 700, letterSpacing: '0.22em', lineHeight: 1,
-              color: norr.ink, textTransform:'uppercase',
-              borderBottom: `0.6px solid ${norr.ink}`,
-            }}>
-              Best&nbsp;before · Lot
+            <div style={{ fontSize: 2.4 * MM, letterSpacing: '0.04em' }}>
+              BF: 2028-08-10
             </div>
-            <div style={{ flex: 1 }} />
+            <div style={{ fontSize: 2.4 * MM, letterSpacing: '0.04em', marginTop: mm(0.5) }}>
+              Lot: 26101D
+            </div>
           </div>
 
           <div style={{ background:'#fff', padding: `${mm(2)} ${mm(2.5)} ${mm(2.5)}`, flexShrink:0 }}>
