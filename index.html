@@ -630,11 +630,16 @@ function PackBack({ showSafe, showDieline }) {
       position: 'relative', width: mm(W), height: mm(H),
       background: norr.mint, color: norr.ice, overflow: 'hidden', boxSizing: 'border-box',
     }}>
-      {/* Header crimp seal — empty brand-color block.
-          The 0–21 mm zone gets folded for the tear notch + zip-close
-          per the supplier dieline; no printed text here. */}
+      {/* Header crimp seal — tear / press-to-reseal labels at the top */}
       <div style={{ position:'absolute', top:0, left:0, right:0, height: mm(topSeal),
-        background: norr.mint }} />
+        background: norr.mint }}>
+        <div style={{ position:'absolute', top:'50%', left:0, right:0, transform:'translateY(-50%)',
+          display:'flex', justifyContent:'space-between', padding:`0 ${mm(6)}` }}>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>← TEAR</span>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>PRESS TO RESEAL</span>
+          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>TEAR →</span>
+        </div>
+      </div>
       <div style={{ position:'absolute', bottom:0, left:0, right:0, height: mm(btmSeal),
         background: norr.mint }} />
 
@@ -648,11 +653,11 @@ function PackBack({ showSafe, showDieline }) {
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
 
-      {/* CONTENT AREA — uses the supplier dieline's full design zone:
-          21 mm from top (below tear-notch + zip-close) to 5 mm from bottom. */}
+      {/* CONTENT AREA — original layout (PackBack stays as it was;
+          only PackFront gets the supplier's 21mm header zone shift). */}
       <div style={{
         position:'absolute',
-        top: mm(21), bottom: mm(5),
+        top: mm(topSeal + 2), bottom: mm(btmSeal + 0.5),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
@@ -850,12 +855,6 @@ function PackBack({ showSafe, showDieline }) {
               Norr Invest ehf., Reykjavík, IS<br/>
               www.norrgum.com
             </div>
-            <div style={{ marginTop: mm(1.2),
-              fontFamily: F_MONO, fontWeight: 700, fontSize: 2.3 * MM, letterSpacing:'0.04em',
-              lineHeight: 1.35, color: norr.ice }}>
-              BF: 2028-08-10<br/>
-              Lot: 26101D
-            </div>
           </div>
           <div>
             <div style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 600,
@@ -877,11 +876,25 @@ function PackBack({ showSafe, showDieline }) {
           </div>
         </div>
 
-        {/* ─── 8. FOOTER — barcode only (BF/Lot moved into admin column) ─── */}
+        {/* ─── 8. FOOTER — pre-printed BF/Lot stamp + barcode ─── */}
         <div style={{ marginTop: mm(1.2), flexShrink:0,
-          display:'flex', justifyContent:'flex-end', alignItems:'flex-end',
+          display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap: mm(1.5),
         }}>
-          <div style={{ background:'#fff', padding: `${mm(2)} ${mm(2.5)} ${mm(2.5)}`, flexShrink:0 }}>
+          {/* Best-before + Lot — pre-printed, requested by supplier */}
+          <div style={{
+            background:'#fff', color: norr.ink,
+            width: mm(32), height: mm(13),
+            border: `1px solid ${norr.ink}`,
+            padding: `${mm(1.5)} ${mm(1.8)}`,
+            fontFamily: F_MONO, fontWeight: 700,
+            fontSize: 2.4 * MM, letterSpacing: '0.04em', lineHeight: 1.4,
+            flexShrink:0, whiteSpace: 'nowrap',
+            boxSizing: 'border-box',
+          }}>
+            BF: 2028-08-10<br/>Lot: 26101D
+          </div>
+
+          <div style={{ background:'#fff', padding: `${mm(1)} ${mm(1)} ${mm(1.6)}`, flexShrink:0 }}>
             <Barcode width={32 * MM} height={15.3 * MM} code="5694080022721" />
           </div>
         </div>
@@ -931,7 +944,7 @@ Object.assign(window, { PackFront, PackBack, PackSide, SafeAreaOverlay, POUCH, T
 <script type="text/babel" data-presets="react" data-source="box.jsx">
 /* === inlined from box.jsx === */
 // NORR — Display Box panels (240 × 140 × 90 mm)
-// Reverse-tuck retail case · 12-unit shelf billboard · perforated tear lid
+// Reverse-tuck retail case · 15-unit shelf billboard · perforated tear lid
 // Compliance: same EU FIC + Iceland Reg 1294/2014 hygiene as the pouch
 // (no implied health claims, bilingual qualifier, Icelandic descriptive name on PDP)
 
@@ -1027,7 +1040,7 @@ function BoxFront({ showSafe }) {
         </MonoLabel>
         <span style={{ fontFamily: F_MONO, fontWeight: 600,
           fontSize: 3.6 * MM, color: norr.ice, letterSpacing:'0.18em' }}>
-          12 × 21,6 g · 259,2 g <span style={{ fontWeight: 500 }}>℮</span>
+          15 × 21,6 g · 324 g <span style={{ fontWeight: 500 }}>℮</span>
         </span>
       </div>
 
@@ -1057,7 +1070,7 @@ function BoxBack({ showSafe }) {
           <Wordmark size={6 * MM} color={norr.mint} />
         </div>
         <MonoLabel size={6.5} tracking="0.3em" color={norr.mint}>
-          DISPLAY CASE · 12 UNITS · ARCTIC MINT
+          DISPLAY CASE · 15 UNITS · ARCTIC MINT
         </MonoLabel>
       </div>
       <Hairline color={norr.mint} style={{ marginTop: mm(1.4), flexShrink:0 }} />
@@ -1213,7 +1226,7 @@ function BoxBack({ showSafe }) {
             Nettómagn · Net
           </MonoLabel>
           <div style={{ marginTop: mm(0.4) }}>
-            12 × 21,6 g · 259,2 g <span style={{ fontFamily: F_MONO }}>℮</span>
+            15 × 21,6 g · 324 g <span style={{ fontFamily: F_MONO }}>℮</span>
           </div>
         </div>
       </div>
@@ -1285,11 +1298,11 @@ function BoxSideShort({ showSafe }) {
             </MonoLabel>
             <div style={{ fontFamily: F_MONO, fontSize: 5.5, color: norr.ice,
               marginTop: mm(0.8), letterSpacing:'0.16em' }}>
-              12 PACKS · 144 PIECES
+              15 PACKS · 180 PIECES
             </div>
             <div style={{ fontFamily: F_MONO, fontSize: 5, color: norr.mintLt,
               marginTop: mm(0.4), letterSpacing:'0.14em' }}>
-              259,2 g <span style={{ fontWeight: 500 }}>℮</span>
+              324 g <span style={{ fontWeight: 500 }}>℮</span>
             </div>
           </div>
         </div>
@@ -1355,7 +1368,7 @@ function BoxTop({ showSafe }) {
           </div>
           <div style={{ marginTop: mm(1.4) }}>
             <MonoLabel size={5} tracking="0.32em" color={norr.mintLt} weight={600}>
-              ENERGY&nbsp;GUM · 12&nbsp;PACKS · 259,2&nbsp;g&nbsp;℮
+              ENERGY&nbsp;GUM · 15&nbsp;PACKS · 324&nbsp;g&nbsp;℮
             </MonoLabel>
           </div>
         </div>
