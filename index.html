@@ -1384,28 +1384,24 @@ function BoxTop({ showSafe }) {
   );
 }
 
-// Small "best before / batch" — WHITE STAMP PAD for manufacturer to ink-stamp the date on.
-// Plain white box with hairline border + tiny IS/EN label.
+// Best-before + Lot — pre-printed for the launch run.
+// Values supplied by manufacturer: BF: 2028-08-10 · Lot: 26101D.
 function BestBeforeBox({ width = 180, height = 48 }) {
+  // Scale the inner text proportionally to the box height
+  const fs = height * 0.26;
   return (
     <div style={{
       width, height,
       background: '#fff',
-      border: `0.6px solid ${norr.ink}`,
-      display: 'flex', flexDirection: 'column',
-      fontFamily: F_MONO, color: norr.ink,
-      overflow: 'hidden',
+      border: `0.8px solid ${norr.ink}`,
+      display: 'flex', flexDirection: 'column', justifyContent: 'center',
+      padding: `0 ${height * 0.18}px`,
+      fontFamily: F_MONO, fontWeight: 700, color: norr.ink,
+      letterSpacing: '0.05em', lineHeight: 1.4,
+      overflow: 'hidden', boxSizing: 'border-box',
     }}>
-      <div style={{
-        fontSize: height * 0.16, letterSpacing: '0.22em', textTransform: 'uppercase',
-        color: norr.ink, lineHeight: 1,
-        padding: `${height * 0.10}px ${height * 0.14}px ${height * 0.06}px`,
-        borderBottom: `0.4px solid ${norr.ink}`,
-      }}>
-        BEST&nbsp;BEFORE · BATCH
-      </div>
-      {/* Empty stamping area — left intentionally blank for the manufacturer's date stamp */}
-      <div style={{ flex: 1 }} />
+      <div style={{ fontSize: fs }}>BF: 2028-08-10</div>
+      <div style={{ fontSize: fs }}>Lot: 26101D</div>
     </div>
   );
 }
