@@ -548,10 +548,12 @@ function PackFront({ showSafe, showDieline }) {
         </div>
       </div>
 
-      {/* MOUNTAIN-BOLT LOGO — horizontally centered, hero-scale */}
+      {/* MOUNTAIN-BOLT LOGO — horizontally centered, hero-scale.
+          Bottom offset reduced (22→18mm) to drop the peak away from the
+          LONG-LASTING FRESHNESS line above. */}
       <div style={{
         position:'absolute',
-        bottom: mm(btmSeal + 22),
+        bottom: mm(btmSeal + 18),
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex', justifyContent: 'center',
