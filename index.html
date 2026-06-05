@@ -494,11 +494,11 @@ function PackFront({ showSafe, showDieline }) {
         background: norr.mint,
       }} />
 
-      {/* TYPE STACK — centered. Top offset = 23mm to stay clear of the 21mm
-          dieline header zone (tear notch + zip-close area). */}
+      {/* TYPE STACK — top at 21mm to align with the supplier dieline's
+          design zone (clear of tear notch + zip-close header). */}
       <div style={{
         position:'absolute',
-        top: mm(23),
+        top: mm(21),
         left: mm(PAD), right: mm(PAD),
         color: norr.ice,
         textAlign: 'center',
@@ -648,11 +648,11 @@ function PackBack({ showSafe, showDieline }) {
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
 
-      {/* CONTENT AREA — starts 23 mm from top (clear of the 21 mm dieline
-          header zone). overflow:hidden as a safety net so nothing escapes. */}
+      {/* CONTENT AREA — uses the supplier dieline's full design zone:
+          21 mm from top (below tear-notch + zip-close) to 5 mm from bottom. */}
       <div style={{
         position:'absolute',
-        top: mm(23), bottom: mm(btmSeal + 0.5),
+        top: mm(21), bottom: mm(5),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
@@ -850,6 +850,12 @@ function PackBack({ showSafe, showDieline }) {
               Norr Invest ehf., Reykjavík, IS<br/>
               www.norrgum.com
             </div>
+            <div style={{ marginTop: mm(1.2),
+              fontFamily: F_MONO, fontWeight: 700, fontSize: 2.3 * MM, letterSpacing:'0.04em',
+              lineHeight: 1.35, color: norr.ice }}>
+              BF: 2028-08-10<br/>
+              Lot: 26101D
+            </div>
           </div>
           <div>
             <div style={{ fontFamily: F_MONO, fontSize: T.adminLbl, fontWeight: 600,
@@ -871,29 +877,10 @@ function PackBack({ showSafe, showDieline }) {
           </div>
         </div>
 
-        {/* ─── 8. FOOTER — stamp pad / URL / barcode ─── */}
+        {/* ─── 8. FOOTER — barcode only (BF/Lot moved into admin column) ─── */}
         <div style={{ marginTop: mm(1.2), flexShrink:0,
-          display:'flex', justifyContent:'space-between', alignItems:'flex-end', gap: mm(1.5),
+          display:'flex', justifyContent:'flex-end', alignItems:'flex-end',
         }}>
-          {/* Best-before + Lot — pre-printed for the launch run.
-              Production values supplied by manufacturer 2026-05-21. */}
-          <div style={{
-            background:'#fff', color: norr.ink,
-            width: mm(32), height: mm(13),
-            border: `1px solid ${norr.ink}`,
-            display:'flex', flexDirection:'column', justifyContent:'center',
-            padding: `${mm(1)} ${mm(1.5)}`,
-            fontFamily: F_MONO, fontWeight: 700,
-            lineHeight: 1.3, color: norr.ink, flexShrink:0,
-          }}>
-            <div style={{ fontSize: 2.4 * MM, letterSpacing: '0.04em' }}>
-              BF: 2028-08-10
-            </div>
-            <div style={{ fontSize: 2.4 * MM, letterSpacing: '0.04em', marginTop: mm(0.5) }}>
-              Lot: 26101D
-            </div>
-          </div>
-
           <div style={{ background:'#fff', padding: `${mm(2)} ${mm(2.5)} ${mm(2.5)}`, flexShrink:0 }}>
             <Barcode width={32 * MM} height={15.3 * MM} code="5694080022721" />
           </div>
