@@ -660,11 +660,11 @@ function PackBack({ showSafe, showDieline }) {
 
       {/* CONTENT AREA — top at 15 mm so the NORR · NORDIC ENERGY masthead
           just clears the 25 × 9 mm euro-hole (bottom of hole at y=14 mm).
-          Modest 3 mm shift from original (12→15) keeps the BBE/Lot + barcode
-          fully visible at the bottom — the flex spacer absorbs the change. */}
+          Bottom extended 1 mm into the seal zone so the barcode digit row
+          stays fully visible (the bottom seal is brand-blue anyway). */}
       <div style={{
         position:'absolute',
-        top: mm(15), bottom: mm(btmSeal + 0.5),
+        top: mm(15), bottom: mm(btmSeal - 0.5),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
