@@ -494,11 +494,12 @@ function PackFront({ showSafe, showDieline }) {
         background: norr.mint,
       }} />
 
-      {/* TYPE STACK — top at 21mm to align with the supplier dieline's
-          design zone (clear of tear notch + zip-close header). */}
+      {/* TYPE STACK — top at 30mm. Leaves the upper 30 mm fully empty
+          (brand-blue bleed only) so the supplier can punch the euro-hole
+          plus the tear-notch + zip-close without cutting any artwork. */}
       <div style={{
         position:'absolute',
-        top: mm(21),
+        top: mm(30),
         left: mm(PAD), right: mm(PAD),
         color: norr.ice,
         textAlign: 'center',
@@ -549,16 +550,16 @@ function PackFront({ showSafe, showDieline }) {
       </div>
 
       {/* MOUNTAIN-BOLT LOGO — horizontally centered, hero-scale.
-          Bottom offset reduced (22→18mm) to drop the peak away from the
-          LONG-LASTING FRESHNESS line above. */}
+          Slightly smaller (38→34mm) and lower (18→14mm) to leave room
+          for the type stack now shifted down to 30 mm. */}
       <div style={{
         position:'absolute',
-        bottom: mm(btmSeal + 18),
+        bottom: mm(btmSeal + 14),
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex', justifyContent: 'center',
       }}>
-        <MountainBolt size={38 * MM} color={norr.ice} accent={norr.ice} />
+        <MountainBolt size={34 * MM} color={norr.ice} accent={norr.ice} />
       </div>
 
       {/* FLAVOR LOCKUP — flavor name + Icelandic descriptor + net quantity */}
