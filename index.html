@@ -633,13 +633,15 @@ function PackBack({ showSafe, showDieline }) {
       position: 'relative', width: mm(W), height: mm(H),
       background: norr.mint, color: norr.ice, overflow: 'hidden', boxSizing: 'border-box',
     }}>
-      {/* Header crimp seal — tear / press-to-reseal labels at the top */}
+      {/* Header crimp seal — tear labels on the sides only.
+          "PRESS TO RESEAL" removed because the euro-hole punches through
+          that center area; the TEAR labels stay because they sit clear
+          of the 25 × 9 mm euro-hole. */}
       <div style={{ position:'absolute', top:0, left:0, right:0, height: mm(topSeal),
         background: norr.mint }}>
         <div style={{ position:'absolute', top:'50%', left:0, right:0, transform:'translateY(-50%)',
           display:'flex', justifyContent:'space-between', padding:`0 ${mm(6)}` }}>
           <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>← TEAR</span>
-          <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>PRESS TO RESEAL</span>
           <span style={{ fontFamily: F_MONO, fontSize: 1.6 * MM, letterSpacing:'0.32em', textTransform:'uppercase', color: norr.ice, opacity: 0.85 }}>TEAR →</span>
         </div>
       </div>
@@ -656,11 +658,12 @@ function PackBack({ showSafe, showDieline }) {
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
 
-      {/* CONTENT AREA — original layout (PackBack stays as it was;
-          only PackFront gets the supplier's 21mm header zone shift). */}
+      {/* CONTENT AREA — top pushed to 19 mm so the NORR · NORDIC ENERGY
+          masthead clears the 25 × 9 mm euro-hole (which extends to y=14 mm).
+          Bottom anchor unchanged — BBE/Lot stamp and barcode stay put. */}
       <div style={{
         position:'absolute',
-        top: mm(topSeal + 2), bottom: mm(btmSeal + 0.5),
+        top: mm(19), bottom: mm(btmSeal + 0.5),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
