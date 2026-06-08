@@ -658,12 +658,13 @@ function PackBack({ showSafe, showDieline }) {
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), left: 0 }}><TearNotch side="left" /></div>
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
 
-      {/* CONTENT AREA — top pushed to 19 mm so the NORR · NORDIC ENERGY
-          masthead clears the 25 × 9 mm euro-hole (which extends to y=14 mm).
-          Bottom anchor unchanged — BBE/Lot stamp and barcode stay put. */}
+      {/* CONTENT AREA — top at 15 mm so the NORR · NORDIC ENERGY masthead
+          just clears the 25 × 9 mm euro-hole (bottom of hole at y=14 mm).
+          Modest 3 mm shift from original (12→15) keeps the BBE/Lot + barcode
+          fully visible at the bottom — the flex spacer absorbs the change. */}
       <div style={{
         position:'absolute',
-        top: mm(19), bottom: mm(btmSeal + 0.5),
+        top: mm(15), bottom: mm(btmSeal + 0.5),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
