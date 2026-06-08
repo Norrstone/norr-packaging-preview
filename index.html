@@ -659,12 +659,12 @@ function PackBack({ showSafe, showDieline }) {
       <div style={{ position:'absolute', top: mm(topSeal - 1.5), right: 0 }}><TearNotch side="right" /></div>
 
       {/* CONTENT AREA — top at 15 mm so the NORR · NORDIC ENERGY masthead
-          just clears the 25 × 9 mm euro-hole (bottom of hole at y=14 mm).
-          Bottom extended 1 mm into the seal zone so the barcode digit row
-          stays fully visible (the bottom seal is brand-blue anyway). */}
+          clears the 25 × 9 mm euro-hole (bottom of hole at y=14 mm).
+          Bottom extended further into the seal zone so the barcode digit
+          row (with its descenders) is fully visible. */}
       <div style={{
         position:'absolute',
-        top: mm(15), bottom: mm(btmSeal - 0.5),
+        top: mm(15), bottom: mm(btmSeal - 2),
         left: mm(sideSeal + PAD - 2), right: mm(sideSeal + PAD - 2),
         display:'flex', flexDirection:'column',
         overflow:'hidden',
